@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modular Battery Swapping Station — Ahraz Shamim</title>
+<meta name="description" content="Case study: leading new product development of a ground-up, AUTOSAR-compliant modular battery swapping station — 6 pilot units, a safety-gated swap sequence, and the energy-as-a-service model behind it.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="brand">ahraz<span>.</span>shamim</a>
+    <div class="nav-links">
+      <a href="../index.html#work" class="hide-sm">Work</a>
+      <a href="../index.html#experience" class="hide-sm">Experience</a>
+      <a href="../index.html#contact" class="cta">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<header class="cs-hero">
+  <div class="wrap">
+    <a class="back" href="../index.html#work">← All work</a>
+    <p class="eyebrow">Case study · New product development · Hardware</p>
+    <h1 class="cs-title">Modular Battery Swapping Station</h1>
+    <p class="lede">
+      A commercial rider doesn't lose money charging — they lose money <em>waiting</em>. This is a ground-up, modular
+      swapping station that turns hours of downtime into a two-minute pit stop, built AUTOSAR-compliant from nothing
+      because no off-the-shelf reference existed, and delivered as six pilot units for client field testing.
+    </p>
+    <dl class="cs-facts">
+      <div><dt>My role</dt><dd>New Product Development lead</dd></div>
+      <div><dt>Timeline</dt><dd>Nov 2024 — Jan 2025</dd></div>
+      <div><dt>Delivered</dt><dd class="hl">6 AUTOSAR-compliant pilot units</dd></div>
+      <div><dt>Stack</dt><dd>MATLAB / Simulink / Stateflow · MISRA Embedded C</dd></div>
+    </dl>
+    <div class="btn-row">
+      <a class="btn btn-ghost" href="../assets/Battery-Swapping-Station-Business-Case.docx" download>↓ Full business case (.docx)</a>
+    </div>
+  </div>
+</header>
+
+<div class="cs-body">
+<div class="wrap">
+
+<h2>Why this project existed</h2>
+<p>
+  Charging time is the defining bottleneck for commercial EV fleets. A delivery rider or e-rickshaw driver is paid by
+  trips completed, so every hour a vehicle sits charging is lost income for both the driver and the operator. Swapping
+  solves that directly — but the infrastructure to do it safely and reliably did not exist off the shelf for the
+  client's needs.
+</p>
+<ul>
+  <li><strong>Downtime kills fleet economics.</strong> Commercial drivers are paid per trip; charging hours are revenue
+    neither they nor the operator ever recover.</li>
+  <li><strong>No reliable modular station existed.</strong> The client needed something built from the ground up — safe,
+    automated and standards-compliant — not a lab prototype that works when an engineer is standing next to it.</li>
+  <li><strong>Safety is non-negotiable.</strong> Swapping involves high-energy batteries and physical actuators. Any
+    unsafe state — a battery ejecting mid-charge, a door unlocking at the wrong moment — is a serious hazard and an
+    instant deal-breaker for deployment.</li>
+</ul>
+
+<div class="callout">
+  <span class="lab">Core thesis</span>
+  <p>
+    Whoever builds safe, reliable swapping infrastructure captures the recurring <strong>energy-as-a-service</strong>
+    layer of the EV economy — far stickier and higher-value than one-time hardware sales. The station is the entry
+    ticket; the per-swap economics are the actual business.
+  </p>
+</div>
+
+<h2>The business model this unlocks</h2>
+<div class="grid-3" style="margin:24px 0">
+  <div class="card reveal">
+    <div class="proj-kicker">Recurring</div>
+    <h3 style="font-size:1.02rem">Energy-as-a-service</h3>
+    <p>Riders pay per swap — recurring revenue rather than a one-time sale, with predictable, high-frequency usage.</p>
+  </div>
+  <div class="card reveal">
+    <div class="proj-kicker">Hybrid</div>
+    <h3 style="font-size:1.02rem">Hardware + recurring</h3>
+    <p>The station is sold or leased to operators, then generates ongoing per-swap revenue and service contracts on top.</p>
+  </div>
+  <div class="card reveal">
+    <div class="proj-kicker">Asset margin</div>
+    <h3 style="font-size:1.02rem">Battery utilisation</h3>
+    <p>Centralised charging optimises battery health and grid usage, improving margin per battery across its lifetime.</p>
+  </div>
+</div>
+
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Impact area</th><th>Mechanism</th><th>Business outcome</th></tr></thead>
+  <tbody>
+    <tr><td>Driver productivity</td><td>Swap in minutes vs. hours charging</td><td class="hl">More trips per day → higher driver and operator income</td></tr>
+    <tr><td>Recurring revenue</td><td>Per-swap pricing</td><td>Predictable, high-frequency cash flow</td></tr>
+    <tr><td>Battery lifetime</td><td>Optimised central charging</td><td>Lower degradation → better margin per asset</td></tr>
+    <tr><td>Market position</td><td>First-mover on safe infrastructure</td><td>Captures the energy-as-a-service layer</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>How it works — the swap sequence</h2>
+<p>
+  The station runs a strict, safety-gated state machine. Every transition has a defined fail-safe, so an unsafe state is
+  <strong>physically impossible rather than merely discouraged</strong> — the distinction that separates a deployable
+  product from a demo.
+</p>
+
+<div class="fig reveal">
+  <div class="fig-title">Five-step swap sequence with interlocks</div>
+  <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five step swap sequence: authenticate, unlock slot, eject depleted battery, insert charged battery, re-lock and confirm — each gated by an interlock">
+    <defs><marker id="b1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4457c9"/></marker></defs>
+
+    <g class="fade-el">
+      <rect x="14" y="60" width="146" height="86" rx="12" fill="#eceefb" stroke="#4457c9" stroke-width="1.6"/>
+      <circle cx="87" cy="84" r="13" fill="#4457c9"/><text x="87" y="89" text-anchor="middle" fill="#fff" style="font-family:'Inter';font-size:13px;font-weight:700">1</text>
+      <text x="87" y="112" text-anchor="middle" class="svg-title">Authenticate</text>
+      <text x="87" y="129" text-anchor="middle" class="svg-label-sm">rider + battery verified</text>
+      <text x="87" y="142" text-anchor="middle" class="svg-label-sm">slot chosen by SoC</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.15s">
+      <rect x="184" y="60" width="146" height="86" rx="12" fill="#fff" stroke="#d8d6cf"/>
+      <circle cx="257" cy="84" r="13" fill="#4457c9"/><text x="257" y="89" text-anchor="middle" fill="#fff" style="font-family:'Inter';font-size:13px;font-weight:700">2</text>
+      <text x="257" y="112" text-anchor="middle" class="svg-title">Unlock slot</text>
+      <text x="257" y="129" text-anchor="middle" class="svg-label-sm">only the selected slot</text>
+      <text x="257" y="142" text-anchor="middle" class="svg-label-sm">releases</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.3s">
+      <rect x="354" y="60" width="146" height="86" rx="12" fill="#fff" stroke="#d8d6cf"/>
+      <circle cx="427" cy="84" r="13" fill="#4457c9"/><text x="427" y="89" text-anchor="middle" fill="#fff" style="font-family:'Inter';font-size:13px;font-weight:700">3</text>
+      <text x="427" y="112" text-anchor="middle" class="svg-title">Eject depleted</text>
+      <text x="427" y="129" text-anchor="middle" class="svg-label-sm">removal confirmed</text>
+      <text x="427" y="142" text-anchor="middle" class="svg-label-sm">before proceeding</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.45s">
+      <rect x="524" y="60" width="146" height="86" rx="12" fill="#fff" stroke="#d8d6cf"/>
+      <circle cx="597" cy="84" r="13" fill="#4457c9"/><text x="597" y="89" text-anchor="middle" fill="#fff" style="font-family:'Inter';font-size:13px;font-weight:700">4</text>
+      <text x="597" y="112" text-anchor="middle" class="svg-title">Insert charged</text>
+      <text x="597" y="129" text-anchor="middle" class="svg-label-sm">SoC and seating</text>
+      <text x="597" y="142" text-anchor="middle" class="svg-label-sm">validated</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.6s">
+      <rect x="694" y="60" width="152" height="86" rx="12" fill="#eaf3ed" stroke="#4b9166" stroke-width="1.6"/>
+      <circle cx="770" cy="84" r="13" fill="#4b9166"/><text x="770" y="89" text-anchor="middle" fill="#fff" style="font-family:'Inter';font-size:13px;font-weight:700">5</text>
+      <text x="770" y="112" text-anchor="middle" class="svg-title" fill="#35714f">Re-lock &amp; confirm</text>
+      <text x="770" y="129" text-anchor="middle" class="svg-label-sm">UI shows new SoC</text>
+      <text x="770" y="142" text-anchor="middle" class="svg-label-sm">depleted starts charging</text>
+    </g>
+
+    <g stroke="#4457c9" stroke-width="1.8" fill="none" marker-end="url(#b1)">
+      <path d="M160,103 L180,103"/><path d="M330,103 L350,103"/>
+      <path d="M500,103 L520,103"/><path d="M670,103 L690,103"/>
+    </g>
+
+    <text x="430" y="30" text-anchor="middle" class="svg-label" fill="#4457c9">every transition is gated — the next step cannot begin until the previous one is confirmed</text>
+
+    <g class="fade-el" style="animation-delay:.75s">
+      <rect x="14" y="182" width="832" height="94" rx="12" fill="#faedeb" stroke="#c05e52" stroke-width="1.4"/>
+      <text x="34" y="208" class="svg-title" fill="#9c463c">Interlocks — states made physically impossible</text>
+      <text x="34" y="232" class="svg-label">✕ Ejecting a battery that is currently charging</text>
+      <text x="34" y="252" class="svg-label">✕ Unlocking any slot other than the selected one</text>
+      <text x="440" y="232" class="svg-label">✕ Unlocking mid-cycle before removal is confirmed</text>
+      <text x="440" y="252" class="svg-label">✓ Every actuator has an explicit fail-safe default state</text>
+    </g>
+  </svg>
+</div>
+
+<h2>Safety architecture</h2>
+<p>
+  Three principles carried the whole design, and all three came from the same insight: on a high-energy system, safety
+  cannot be a procedure people follow — it has to be a state the machine cannot enter.
+</p>
+<ul>
+  <li><strong>Every actuator has an explicit fail-safe default.</strong> Loss of power, loss of comms or an unexpected
+    reset all resolve to the same known-safe configuration rather than to whatever the last command happened to be.</li>
+  <li><strong>Interlock conditions make unsafe transitions impossible</strong> — ejecting a charging battery or unlocking
+    mid-cycle aren't guarded against in software logic, they're gated at the transition itself.</li>
+  <li><strong>Modular subsystems built and tested in parallel against defined interfaces</strong> — sequencing, actuator
+    control, SoC display and interlocks each developed independently, which is what made a three-month timeline
+    survivable with mechanical, electrical and embedded teams working simultaneously.</li>
+</ul>
+
+<div class="callout">
+  <span class="lab">Why model-based development earned its keep</span>
+  <p>
+    Building the sequencing in <strong>MATLAB/Simulink/Stateflow</strong> meant the state machine was reviewable as a
+    diagram by mechanical and client stakeholders who don't read Embedded C — and the same model generated
+    <strong>MISRA-compliant</strong> code. On a safety-gated system, having one artefact that is simultaneously the
+    specification, the review surface and the source of the implementation removes an entire class of
+    spec-drift failures.
+  </p>
+</div>
+
+<h2>Stakeholder alignment</h2>
+<p>
+  As NPD lead I aligned mechanical, electrical, embedded and client stakeholders around a single safe, shippable MVP —
+  which mostly meant deciding what <em>not</em> to build.
+</p>
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Stakeholder</th><th>Their priority</th><th>How I aligned them</th></tr></thead>
+  <tbody>
+    <tr><td>Mechanical team</td><td>Robust physical swap mechanism</td><td>Defined clear module interfaces up front so subsystems could progress in parallel</td></tr>
+    <tr><td>Electrical / embedded</td><td>Safe actuator &amp; SoC control</td><td class="hl">Specified fail-safe states and interlocks as hard requirements, not guidance</td></tr>
+    <tr><td>Client</td><td>Automotive-grade reliability</td><td>Committed to AUTOSAR compliance for core safety components</td></tr>
+    <tr><td>Field test / ops</td><td>Units that survive real use</td><td>Phased to 6 pilot units for controlled field testing rather than a wider first run</td></tr>
+    <tr><td>Leadership</td><td>On-time MVP delivery</td><td>Prioritised essential AUTOSAR scope; deferred non-critical polish</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Outcome &amp; strategic value</h2>
+<div class="stat-row">
+  <div class="stat-pill"><div class="v">6</div><div class="k">AUTOSAR-compliant pilot units delivered</div></div>
+  <div class="stat-pill"><div class="v">Minutes</div><div class="k">Swap time vs. hours of charging</div></div>
+  <div class="stat-pill"><div class="v">0</div><div class="k">Off-the-shelf reference designs available</div></div>
+  <div class="stat-pill"><div class="v">Days</div><div class="k">To integrate a new battery type, post-modularisation</div></div>
+</div>
+<ul>
+  <li><strong>Six AUTOSAR-compliant pilot units delivered</strong> from a ground-up design with no reference to work
+    from.</li>
+  <li><strong>Technical and safety feasibility proven</strong> for modular swapping under the client's real field
+    conditions — the question the pilot existed to answer.</li>
+  <li><strong>Foundation established for an energy-as-a-service revenue model</strong> with recurring per-swap
+    economics.</li>
+  <li><strong>Modular architecture cut the cost of later capability</strong> — a new battery type integrates in days
+    rather than weeks, which is where the architectural investment repays itself.</li>
+</ul>
+
+<h2>What I'd take to the next one</h2>
+<p>
+  On safety-critical hardware, <strong>define the interfaces before the components</strong>. It looks like overhead in
+  week one and it's the only reason three disciplines could build simultaneously against a fixed date. And the framing
+  that made the AUTOSAR scope decision easy: compliance isn't a checkbox you satisfy at the end, it's a constraint you
+  choose the MVP boundary around at the start — so pick the safety-critical core, commit to it fully, and defer
+  everything that isn't.
+</p>
+
+</div>
+</div>
+
+<div class="next-cs">
+  <div class="wrap" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center">
+    <span style="color:var(--text-faint);font-family:var(--mono);font-size:.8rem">Next case study</span>
+    <a class="btn btn-ghost" href="geolocation.html">Multi-Source Geolocation System →</a>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© <span class="yr">2026</span> Ahraz Shamim</span>
+    <span>
+      <a href="mailto:shamimahraz@gmail.com">Email</a> ·
+      <a href="https://www.linkedin.com/in/ahraz-shamim-6b9876194/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="../assets/Ahraz-Shamim-Resume.pdf" download>Résumé</a>
+    </span>
+  </div>
+</footer>
+<script src="../site.js"></script>
+</body>
+</html>

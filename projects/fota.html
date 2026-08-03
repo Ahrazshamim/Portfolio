@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mass FOTA Automation Dashboard — Ahraz Shamim</title>
+<meta name="description" content="Case study: turning manual per-device firmware rollouts into a self-serve, CSV-driven fleet campaign tool with per-device status tracking.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="brand">ahraz<span>.</span>shamim</a>
+    <div class="nav-links">
+      <a href="../index.html#work" class="hide-sm">Work</a>
+      <a href="../index.html#experience" class="hide-sm">Experience</a>
+      <a href="../index.html#contact" class="cta">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<header class="cs-hero">
+  <div class="wrap">
+    <a class="back" href="../index.html#work">← All work</a>
+    <p class="eyebrow">Case study · Internal tool · Fleet operations</p>
+    <h1 class="cs-title">Mass FOTA Automation Dashboard</h1>
+    <p class="lede">
+      Shipping firmware to one device is engineering. Shipping it to a fleet, repeatedly, without an engineer in the
+      room, is product. This dashboard turned firmware rollout from a specialist task into a CSV upload and a button.
+    </p>
+    <dl class="cs-facts">
+      <div><dt>My role</dt><dd>Product owner + builder</dd></div>
+      <div><dt>Company</dt><dd>Vecmocon Technologies</dd></div>
+      <div><dt>Users</dt><dd>Operations &amp; support — not engineers</dd></div>
+      <div><dt>Input</dt><dd>CSV of device IDs + firmware binary</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="cs-body">
+<div class="wrap">
+
+<h2>The problem</h2>
+<p>
+  Firmware-over-the-air updates existed. That wasn't the issue. The issue was that running one meant an engineer, a
+  terminal, a list of device IDs, and a lot of patience — device by device, checking status by hand, retrying the ones
+  that dropped mid-transfer because the vehicle was in a basement or switched off.
+</p>
+<p>
+  That workflow has three compounding costs, and only the first one is obvious:
+</p>
+<ul>
+  <li><strong>Engineering toil.</strong> Senior engineering time spent on repetitive dispatch instead of building.</li>
+  <li><strong>Release drag.</strong> Because rollouts were painful, they got batched and deferred. Fixes that were ready
+    sat waiting for someone to have a free afternoon — which meant the field ran older firmware than it needed to.</li>
+  <li><strong>Error rate.</strong> Manual device targeting means typos, missed units, and a fleet that silently ends up
+    on three different firmware versions. Then a support ticket arrives and nobody's sure what's actually running on
+    that vehicle.</li>
+</ul>
+
+<div class="callout">
+  <span class="lab">The framing that got it prioritised</span>
+  <p>
+    Internal tools lose roadmap arguments to customer-facing features by default. The argument that worked was
+    reframing it as a <strong>release-velocity</strong> problem rather than a convenience one: every hour of rollout
+    friction is an hour of delay on every fix behind it. The tool wasn't competing with features — it was competing with
+    the cost of shipping them slowly.
+  </p>
+</div>
+
+<h2>What I built</h2>
+<p>
+  A dashboard where an operator does exactly two things: <strong>upload a CSV of device IDs, attach the firmware
+  build, start the campaign.</strong> Everything after that is orchestration.
+</p>
+
+<div class="fig reveal">
+  <div class="fig-title">Before → after: the rollout workflow</div>
+  <svg viewBox="0 0 820 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Before, an engineer pushed firmware device by device. After, operations uploads a CSV and the backend orchestrates the campaign.">
+    <defs><marker id="f1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#9a9ea8"/></marker></defs>
+
+    <!-- BEFORE -->
+    <text x="30" y="24" class="svg-title" fill="#9c463c">BEFORE · engineer in the loop</text>
+    <g class="fade-el">
+      <rect x="30" y="38" width="120" height="46" rx="9" fill="#faedeb" stroke="#c05e52"/>
+      <text x="90" y="60" text-anchor="middle" class="svg-title">Engineer</text>
+      <text x="90" y="75" text-anchor="middle" class="svg-label-sm">+ terminal</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.15s">
+      <rect x="205" y="30" width="86" height="26" rx="6" fill="#fff" stroke="#d8d6cf"/>
+      <text x="248" y="47" text-anchor="middle" class="svg-label-sm">device 1</text>
+      <rect x="205" y="62" width="86" height="26" rx="6" fill="#fff" stroke="#d8d6cf"/>
+      <text x="248" y="79" text-anchor="middle" class="svg-label-sm">device 2</text>
+      <rect x="205" y="94" width="86" height="26" rx="6" fill="#fff" stroke="#d8d6cf"/>
+      <text x="248" y="111" text-anchor="middle" class="svg-label-sm">device 3 …</text>
+    </g>
+    <g stroke="#c05e52" stroke-width="1.4" fill="none" marker-end="url(#f1)">
+      <path d="M150,55 L200,43"/><path d="M150,61 L200,75"/><path d="M150,68 L200,107"/>
+    </g>
+    <g class="fade-el" style="animation-delay:.3s">
+      <text x="320" y="48" class="svg-label" fill="#9c463c">✕ senior time on repetitive dispatch</text>
+      <text x="320" y="68" class="svg-label" fill="#9c463c">✕ rollouts batched &amp; deferred → release drag</text>
+      <text x="320" y="88" class="svg-label" fill="#9c463c">✕ typos, missed units, mixed firmware versions</text>
+      <text x="320" y="108" class="svg-label" fill="#9c463c">✕ nobody knows what a vehicle is running</text>
+    </g>
+
+    <line x1="30" y1="146" x2="790" y2="146" stroke="#e8e7e2" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+    <!-- AFTER -->
+    <text x="30" y="178" class="svg-title" fill="#35714f">AFTER · operations self-serve</text>
+    <g class="fade-el" style="animation-delay:.45s">
+      <rect x="30" y="194" width="130" height="58" rx="9" fill="#eaf3ed" stroke="#4b9166"/>
+      <text x="95" y="216" text-anchor="middle" class="svg-title">Operator</text>
+      <text x="95" y="232" text-anchor="middle" class="svg-label-sm">CSV of device IDs</text>
+      <text x="95" y="246" text-anchor="middle" class="svg-label-sm">+ firmware build</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.6s">
+      <rect x="210" y="194" width="150" height="58" rx="9" fill="#4457c9"/>
+      <text x="285" y="218" text-anchor="middle" fill="#fff" style="font-family:'Inter';font-size:13px;font-weight:600">Campaign</text>
+      <text x="285" y="236" text-anchor="middle" fill="#ccd2f2" style="font-family:'IBM Plex Mono';font-size:10px">orchestration</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.75s">
+      <rect x="415" y="176" width="150" height="30" rx="6" fill="#eaf3ed" stroke="#4b9166"/>
+      <text x="490" y="196" text-anchor="middle" class="svg-label" fill="#35714f">completed</text>
+      <rect x="415" y="212" width="150" height="30" rx="6" fill="#eceefb" stroke="#4457c9"/>
+      <text x="490" y="232" text-anchor="middle" class="svg-label" fill="#313f9e">in progress</text>
+      <rect x="415" y="248" width="150" height="30" rx="6" fill="#f6f6f3" stroke="#d8d6cf"/>
+      <text x="490" y="268" text-anchor="middle" class="svg-label">offline — not yet reached</text>
+    </g>
+    <g stroke="#4457c9" stroke-width="1.6" fill="none" marker-end="url(#f1)">
+      <path d="M160,223 L205,223" class="flow-dash"/>
+      <path d="M360,215 L410,191" class="flow-dash"/>
+      <path d="M360,223 L410,227" class="flow-dash"/>
+      <path d="M360,232 L410,263" class="flow-dash"/>
+    </g>
+    <g class="fade-el" style="animation-delay:.9s">
+      <text x="600" y="196" class="svg-label" fill="#35714f">✓ no ticket, no engineer</text>
+      <text x="600" y="216" class="svg-label" fill="#35714f">✓ fleet version is knowable</text>
+      <text x="600" y="236" class="svg-label" fill="#35714f">✓ offline = normal state</text>
+      <text x="600" y="256" class="svg-label" fill="#35714f">✓ fixes ship when ready</text>
+    </g>
+    <text x="410" y="308" text-anchor="middle" class="svg-label-sm">Offline devices — parked, powered down, out of coverage — are devices the campaign hasn't reached yet, not errors to triage</text>
+  </svg>
+</div>
+
+<h3>CSV-driven targeting</h3>
+<p>
+  CSV was a deliberate choice over building a query builder or a device-picker UI. Ops already lives in spreadsheets —
+  the device list for "all TATA units in the Pune pilot" already exists as a spreadsheet column, produced by whatever
+  tool they used to get it. Meeting them in the format they already have removed a whole class of "how do I select the
+  right devices" problems, and it meant zero training. The fastest interface is often the one the user has already
+  built themselves.
+</p>
+
+<h3>Campaign orchestration</h3>
+<p>
+  The backend takes the target list and manages the rollout as a <strong>campaign</strong> rather than a series of
+  independent pushes: distributing the firmware, tracking which devices have acknowledged, which are in progress, which
+  completed, and which failed. Devices that are offline — parked, powered down, out of coverage — are simply devices the
+  campaign hasn't reached yet, not errors requiring a human decision.
+</p>
+
+<h3>Per-device status tracking</h3>
+<p>
+  The status view is what turns the tool from a script into a product. At any moment an operator can answer "what version
+  is this fleet on, and which specific units haven't taken the update?" without asking engineering. That single question
+  was previously the source of a large share of internal back-and-forth — and it's also the question that support needs
+  answered before they can diagnose anything.
+</p>
+
+<h2>Product decisions</h2>
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Decision</th><th>Reasoning</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Self-serve for ops, not a request queue to engineering</td>
+      <td>A tool engineers run on request is still a bottleneck with a nicer interface. Removing engineering from the
+        loop entirely is the whole value; anything less just relocates the queue.</td>
+    </tr>
+    <tr>
+      <td>CSV input over a device-query UI</td>
+      <td>Ops already produces these lists. Building a query builder would have been more work, later, and would have
+        needed training — to replace a workflow they were already fluent in.</td>
+    </tr>
+    <tr>
+      <td>Campaign as a first-class object</td>
+      <td>Fleet rollouts are inherently long-running and partially complete. Modelling that explicitly, instead of as
+        "a batch of pushes," is what makes offline devices a normal state rather than a failure to triage.</td>
+    </tr>
+    <tr>
+      <td>Visible per-device status</td>
+      <td>Answers the version question without a human relay. Turns firmware state from tribal knowledge into something
+        support can look up.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Outcome</h2>
+<ul>
+  <li><strong>Rollouts moved from engineering to operations</strong> — self-serve, no ticket, no specialist required.</li>
+  <li><strong>Fleet-wide updates became routine</strong> instead of an event to schedule around, so fixes reach the field
+    when they're ready rather than when someone's free.</li>
+  <li><strong>Manual targeting errors eliminated</strong>; fleet firmware state became consistent and, more importantly,
+    <em>knowable</em>.</li>
+  <li><strong>Engineering toil removed</strong> from the release path entirely.</li>
+</ul>
+
+<h2>What I'd take to the next one</h2>
+<p>
+  The highest-leverage product work is often the least glamorous: find the workflow where a specialist is acting as a
+  human API, and remove them from the loop. It never wins a roadmap argument on its own merits, so it has to be framed
+  in terms of what it unblocks. And when you build for internal users, <strong>build for the format they already work
+  in</strong> — adoption problems are mostly format problems in disguise.
+</p>
+
+</div>
+</div>
+
+<div class="next-cs">
+  <div class="wrap" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center">
+    <span style="color:var(--text-faint);font-family:var(--mono);font-size:.8rem">Next case study</span>
+    <a class="btn btn-ghost" href="vehicle-platform.html">Connected Vehicle Platform →</a>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© <span class="yr">2026</span> Ahraz Shamim</span>
+    <span>
+      <a href="mailto:shamimahraz@gmail.com">Email</a> ·
+      <a href="https://www.linkedin.com/in/ahraz-shamim-6b9876194/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="../assets/Ahraz-Shamim-Resume.pdf" download>Résumé</a>
+    </span>
+  </div>
+</footer>
+<script src="../site.js"></script>
+</body>
+</html>

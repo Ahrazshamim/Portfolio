@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Font preview — pick one, then tell me</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fcfcfa; --tint:#f6f6f3; --border:#e8e7e2; --strong:#d8d6cf;
+    --text:#14161c; --mid:#454a56; --dim:#6e7380; --faint:#9a9ea8;
+    --accent:#4457c9; --accent-soft:#eceefb;
+    --mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+
+  header.top{border-bottom:1px solid var(--border);background:var(--tint);padding:48px 0 40px}
+  h1.pt{font-size:2.1rem;letter-spacing:-.035em;margin:0 0 10px;font-weight:700}
+  header.top p{color:var(--mid);margin:0;max-width:62ch;line-height:1.65}
+  .kbd{font-family:var(--mono);font-size:.82rem;background:#fff;border:1px solid var(--strong);border-radius:6px;padding:2px 7px}
+
+  .sample{border-bottom:1px solid var(--border);padding:52px 0}
+  .sample:nth-child(even){background:var(--tint)}
+  .badge{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--accent);background:var(--accent-soft);
+    border-radius:999px;padding:4px 12px;display:inline-block;margin-bottom:6px;
+  }
+  .verdict{font-size:.87rem;color:var(--dim);margin:10px 0 26px;max-width:70ch;line-height:1.6;font-family:"Inter",sans-serif}
+  .verdict b{color:var(--text)}
+
+  .demo h2{font-size:clamp(1.9rem,4.4vw,3.1rem);letter-spacing:-.038em;line-height:1.08;margin:0 0 12px;font-weight:700}
+  .demo .grad{color:var(--accent)}
+  .demo .role{font-family:var(--mono);font-size:.9rem;color:var(--accent);margin:0 0 16px}
+  .demo .lede{font-size:1.08rem;color:var(--mid);line-height:1.66;margin:0 0 22px;max-width:66ch}
+  .demo .sub{font-size:1.16rem;letter-spacing:-.02em;font-weight:600;margin:26px 0 8px}
+  .demo .body{font-size:.97rem;color:var(--mid);line-height:1.7;max-width:70ch;margin:0 0 18px}
+  .demo .nums{display:flex;gap:26px;flex-wrap:wrap;margin:22px 0 0}
+  .demo .nums div{min-width:118px}
+  .demo .n{font-size:1.75rem;font-weight:700;letter-spacing:-.035em;color:var(--accent);line-height:1.1}
+  .demo .l{font-size:.78rem;color:var(--dim);margin-top:5px;font-family:"Inter",sans-serif}
+  .demo .lab{font-family:var(--mono);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin:24px 0 0}
+
+  .apply{
+    margin-top:26px;background:#fff;border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;font-family:var(--mono);font-size:.79rem;color:var(--mid);line-height:1.75;
+    overflow-x:auto;white-space:pre;
+  }
+  .apply b{color:var(--accent)}
+  footer{padding:56px 0 80px;color:var(--dim);font-size:.9rem;line-height:1.7}
+  footer b{color:var(--text)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1 class="pt">Six typefaces, your actual copy</h1>
+    <p>
+      Every block below renders the real hero, a case-study heading, body copy and a metric — so you're judging the font
+      on your words, not on "The quick brown fox". Scroll, pick the one that reads best, and tell me the name.
+      The site is currently set to <span class="kbd">Inter</span>.
+    </p>
+  </div>
+</header>
+
+<!-- ============ 1 · INTER ============ -->
+<section class="sample">
+  <div class="wrap">
+    <span class="badge">01 · Inter — currently applied</span>
+    <p class="verdict">
+      The default of serious software — Linear, Vercel, GitHub, Figma. <b>Invisible in a good way:</b> nobody has ever
+      described a site as badly designed because it used Inter. Designed specifically for screens, so it stays sharp at
+      small sizes in your tables and labels. The trade-off is character: it's safe, not memorable.
+    </p>
+    <div class="demo" style="font-family:'Inter',sans-serif">
+      <h2>I ship products <span class="grad">and the firmware</span> underneath them.</h2>
+      <p class="role">Technical Product Manager · IoT &amp; SaaS · EV ecosystem</p>
+      <p class="lede">I'm Ahraz Shamim. For 2+ years at a hardware startup I've owned roadmaps, PRDs, RICE prioritization and a ₹40L/month product P&amp;L — while personally writing the embedded C underneath.</p>
+      <p class="sub">Why these are one project, not five</p>
+      <p class="body">Anti-theft has to work on a parked vehicle, so it must survive whatever power saving does. The buzzer is wired to the ignition circuit, so a lock beep means briefly driving the ignition line — which must not read as an ignition-on event.</p>
+      <div class="nums">
+        <div><div class="n">₹40L/mo</div><div class="l">Product P&amp;L owned</div></div>
+        <div><div class="n">+78%</div><div class="l">Lift in KPIs</div></div>
+        <div><div class="n">5,000+</div><div class="l">Test cases</div></div>
+      </div>
+      <p class="lab">Case study · Flagship · Product + firmware</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · PLUS JAKARTA SANS ============ -->
+<section class="sample">
+  <div class="wrap">
+    <span class="badge">02 · Plus Jakarta Sans</span>
+    <p class="verdict">
+      Inter with warmth. Slightly rounder, a touch more personality in the <b>a</b>, <b>g</b> and <b>y</b>, and headlines
+      feel a little friendlier without becoming quirky. Popular in modern SaaS marketing sites. If Inter feels too
+      neutral to you, this is the smallest safe step away from it.
+    </p>
+    <div class="demo" style="font-family:'Plus Jakarta Sans',sans-serif">
+      <h2>I ship products <span class="grad">and the firmware</span> underneath them.</h2>
+      <p class="role">Technical Product Manager · IoT &amp; SaaS · EV ecosystem</p>
+      <p class="lede">I'm Ahraz Shamim. For 2+ years at a hardware startup I've owned roadmaps, PRDs, RICE prioritization and a ₹40L/month product P&amp;L — while personally writing the embedded C underneath.</p>
+      <p class="sub">Why these are one project, not five</p>
+      <p class="body">Anti-theft has to work on a parked vehicle, so it must survive whatever power saving does. The buzzer is wired to the ignition circuit, so a lock beep means briefly driving the ignition line — which must not read as an ignition-on event.</p>
+      <div class="nums">
+        <div><div class="n">₹40L/mo</div><div class="l">Product P&amp;L owned</div></div>
+        <div><div class="n">+78%</div><div class="l">Lift in KPIs</div></div>
+        <div><div class="n">5,000+</div><div class="l">Test cases</div></div>
+      </div>
+      <p class="lab">Case study · Flagship · Product + firmware</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · GEIST ============ -->
+<section class="sample">
+  <div class="wrap">
+    <span class="badge">03 · Geist</span>
+    <p class="verdict">
+      Vercel's own typeface, built for developer products. Tighter and more mechanical than Inter, with a slightly
+      technical feel that suits an embedded/IoT portfolio. <b>Very current</b> — which cuts both ways: it will look of
+      its moment in three years.
+    </p>
+    <div class="demo" style="font-family:'Geist',sans-serif">
+      <h2>I ship products <span class="grad">and the firmware</span> underneath them.</h2>
+      <p class="role">Technical Product Manager · IoT &amp; SaaS · EV ecosystem</p>
+      <p class="lede">I'm Ahraz Shamim. For 2+ years at a hardware startup I've owned roadmaps, PRDs, RICE prioritization and a ₹40L/month product P&amp;L — while personally writing the embedded C underneath.</p>
+      <p class="sub">Why these are one project, not five</p>
+      <p class="body">Anti-theft has to work on a parked vehicle, so it must survive whatever power saving does. The buzzer is wired to the ignition circuit, so a lock beep means briefly driving the ignition line — which must not read as an ignition-on event.</p>
+      <div class="nums">
+        <div><div class="n">₹40L/mo</div><div class="l">Product P&amp;L owned</div></div>
+        <div><div class="n">+78%</div><div class="l">Lift in KPIs</div></div>
+        <div><div class="n">5,000+</div><div class="l">Test cases</div></div>
+      </div>
+      <p class="lab">Case study · Flagship · Product + firmware</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · MANROPE ============ -->
+<section class="sample">
+  <div class="wrap">
+    <span class="badge">04 · Manrope</span>
+    <p class="verdict">
+      Semi-rounded and open, with noticeably wide letterforms. Headlines feel calm and confident rather than punchy.
+      <b>Best of these for long reading</b> — your case studies are long, and this is the easiest on the eye across a
+      2,000-word page. Slightly less crisp than Inter in small table text.
+    </p>
+    <div class="demo" style="font-family:'Manrope',sans-serif">
+      <h2>I ship products <span class="grad">and the firmware</span> underneath them.</h2>
+      <p class="role">Technical Product Manager · IoT &amp; SaaS · EV ecosystem</p>
+      <p class="lede">I'm Ahraz Shamim. For 2+ years at a hardware startup I've owned roadmaps, PRDs, RICE prioritization and a ₹40L/month product P&amp;L — while personally writing the embedded C underneath.</p>
+      <p class="sub">Why these are one project, not five</p>
+      <p class="body">Anti-theft has to work on a parked vehicle, so it must survive whatever power saving does. The buzzer is wired to the ignition circuit, so a lock beep means briefly driving the ignition line — which must not read as an ignition-on event.</p>
+      <div class="nums">
+        <div><div class="n">₹40L/mo</div><div class="l">Product P&amp;L owned</div></div>
+        <div><div class="n">+78%</div><div class="l">Lift in KPIs</div></div>
+        <div><div class="n">5,000+</div><div class="l">Test cases</div></div>
+      </div>
+      <p class="lab">Case study · Flagship · Product + firmware</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · INSTRUMENT SANS ============ -->
+<section class="sample">
+  <div class="wrap">
+    <span class="badge">05 · Instrument Sans</span>
+    <p class="verdict">
+      Slightly narrower and more editorial — reads like a well-designed magazine rather than a SaaS landing page.
+      Headlines get more words per line, which suits your longer case-study titles. <b>Quietly distinctive</b> without
+      being a statement.
+    </p>
+    <div class="demo" style="font-family:'Instrument Sans',sans-serif">
+      <h2>I ship products <span class="grad">and the firmware</span> underneath them.</h2>
+      <p class="role">Technical Product Manager · IoT &amp; SaaS · EV ecosystem</p>
+      <p class="lede">I'm Ahraz Shamim. For 2+ years at a hardware startup I've owned roadmaps, PRDs, RICE prioritization and a ₹40L/month product P&amp;L — while personally writing the embedded C underneath.</p>
+      <p class="sub">Why these are one project, not five</p>
+      <p class="body">Anti-theft has to work on a parked vehicle, so it must survive whatever power saving does. The buzzer is wired to the ignition circuit, so a lock beep means briefly driving the ignition line — which must not read as an ignition-on event.</p>
+      <div class="nums">
+        <div><div class="n">₹40L/mo</div><div class="l">Product P&amp;L owned</div></div>
+        <div><div class="n">+78%</div><div class="l">Lift in KPIs</div></div>
+        <div><div class="n">5,000+</div><div class="l">Test cases</div></div>
+      </div>
+      <p class="lab">Case study · Flagship · Product + firmware</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · SERIF HEADINGS ============ -->
+<section class="sample">
+  <div class="wrap">
+    <span class="badge">06 · Source Serif headings + Inter body</span>
+    <p class="verdict">
+      The one genuinely different direction: serif headlines over a sans body. Signals <b>senior, considered,
+      editorial</b> — closer to a strategy consultancy than a tech startup. It's the boldest choice here, and the one
+      most likely to make a recruiter remember the page. It slightly undersells the "I write firmware" half of your
+      positioning.
+    </p>
+    <div class="demo" style="font-family:'Inter',sans-serif">
+      <h2 style="font-family:'Source Serif 4',Georgia,serif;letter-spacing:-.02em;font-weight:600">I ship products <span class="grad">and the firmware</span> underneath them.</h2>
+      <p class="role">Technical Product Manager · IoT &amp; SaaS · EV ecosystem</p>
+      <p class="lede">I'm Ahraz Shamim. For 2+ years at a hardware startup I've owned roadmaps, PRDs, RICE prioritization and a ₹40L/month product P&amp;L — while personally writing the embedded C underneath.</p>
+      <p class="sub" style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;letter-spacing:0">Why these are one project, not five</p>
+      <p class="body">Anti-theft has to work on a parked vehicle, so it must survive whatever power saving does. The buzzer is wired to the ignition circuit, so a lock beep means briefly driving the ignition line — which must not read as an ignition-on event.</p>
+      <div class="nums">
+        <div><div class="n" style="font-family:'Source Serif 4',Georgia,serif">₹40L/mo</div><div class="l">Product P&amp;L owned</div></div>
+        <div><div class="n" style="font-family:'Source Serif 4',Georgia,serif">+78%</div><div class="l">Lift in KPIs</div></div>
+        <div><div class="n" style="font-family:'Source Serif 4',Georgia,serif">5,000+</div><div class="l">Test cases</div></div>
+      </div>
+      <p class="lab">Case study · Flagship · Product + firmware</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b>Pick one and tell me the number</b> — I'll apply it across all eight pages, including the text inside the SVG diagrams, and re-tune the letter-spacing and weights to suit it. Each face needs different tracking to look right, so it's not a one-line swap.</p>
+    <p style="margin-top:18px">If you want to try one yourself first, open <span class="kbd">styles.css</span> and change <span class="kbd">--display</span> (headings) and <span class="kbd">--sans</span> (body) at the top, then add the font to the Google Fonts <span class="kbd">&lt;link&gt;</span> in each HTML file's <span class="kbd">&lt;head&gt;</span>.</p>
+    <p style="margin-top:18px"><a href="index.html" style="color:var(--accent);font-weight:600">← Back to the portfolio</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

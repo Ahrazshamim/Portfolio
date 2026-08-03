@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connected Vehicle Security &amp; Control Platform — Ahraz Shamim</title>
+<meta name="description" content="Case study: BLE keyless control, three-tier power management, motion-aware anti-theft, CAN battery interlocks and offline Find My recovery — one integrated vehicle platform.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="brand">ahraz<span>.</span>shamim</a>
+    <div class="nav-links">
+      <a href="../index.html#work" class="hide-sm">Work</a>
+      <a href="../index.html#experience" class="hide-sm">Experience</a>
+      <a href="../index.html#contact" class="cta">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<header class="cs-hero">
+  <div class="wrap">
+    <a class="back" href="../index.html#work">← All work</a>
+    <p class="eyebrow">Flagship case study · Product + firmware</p>
+    <h1 class="cs-title">Connected Vehicle Security<br>&amp; Control Platform</h1>
+    <p class="lede">
+      Keyless BLE control, three-tier power management, motion-aware anti-theft, CAN battery interlocks and
+      network-independent recovery — shipped as one integrated system on an EC200U tracker. Every feature here
+      constrains every other, which is exactly why they had to be designed as a platform rather than a backlog.
+    </p>
+    <dl class="cs-facts">
+      <div><dt>My role</dt><dd>Product owner + firmware developer</dd></div>
+      <div><dt>Company</dt><dd>Vecmocon Technologies</dd></div>
+      <div><dt>Platform</dt><dd>EC200U tracker · companion MCU · BLE app</dd></div>
+      <div><dt>Headline</dt><dd>~4× lower standby draw with security always on</dd></div>
+    </dl>
+    <div class="btn-row">
+      <a class="btn btn-ghost" href="../assets/Vehicle-Features-Functional-Guide.docx" download>↓ Functional spec (.docx)</a>
+    </div>
+  </div>
+</header>
+
+<div class="cs-body">
+<div class="wrap">
+
+<h2>Why these are one project, not five</h2>
+<p>
+  On paper this looks like a feature list: an app, a power saver, an alarm, a battery check, a locator. In practice
+  they're a single system, because each one's requirements are written in the others' constraints:
+</p>
+<ul>
+  <li>Anti-theft has to work on a <strong>parked</strong> vehicle — so it has to survive whatever power saving does.</li>
+  <li>Power saving switches off the mobile radio — so <strong>ignition permission</strong>, which depends on a CAN
+    battery heartbeat, can't be granted while asleep.</li>
+  <li>The buzzer is wired to the ignition circuit — so making a <strong>lock beep</strong> means briefly driving the
+    ignition line, which must not read as an ignition-on event.</li>
+  <li>If the mobile network is the only way to find a stolen vehicle, then <strong>power saving defeats recovery</strong> —
+    which is why the locator had to be radio-independent.</li>
+</ul>
+<p>
+  Building these as separate tickets would have produced a device that saves power beautifully and can't protect itself.
+  The architectural commitment that made it work is one sentence: <strong>Bluetooth and the motion sensor never switch
+  off.</strong> Everything else is negotiable.
+</p>
+
+<div class="fig reveal">
+  <div class="fig-title">System architecture</div>
+  <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="System architecture: BLE app and sensors feed the IoT tracker, which drives outputs, cloud and the Find My network">
+    <defs>
+      <marker id="ah" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L8,3 z" fill="#9a9ea8"/>
+      </marker>
+    </defs>
+    <!-- centre node -->
+    <rect x="340" y="110" width="180" height="80" rx="12" fill="#4457c9" class="fade-el" style="animation-delay:.1s"/>
+    <text x="430" y="142" text-anchor="middle" fill="#fff" style="font-family:'Inter',sans-serif;font-size:15px;font-weight:700" class="fade-el">IoT Tracker</text>
+    <text x="430" y="162" text-anchor="middle" fill="#ccd2f2" style="font-family:'IBM Plex Mono',monospace;font-size:11px" class="fade-el">EC200U · always awake</text>
+    <text x="430" y="179" text-anchor="middle" fill="#ccd2f2" style="font-family:'IBM Plex Mono',monospace;font-size:10px" class="fade-el">aux-battery powered</text>
+
+    <!-- inputs left -->
+    <g class="fade-el" style="animation-delay:.25s">
+      <rect x="30" y="30" width="150" height="46" rx="9" fill="#fff" stroke="#d8d6cf"/>
+      <text x="105" y="52" text-anchor="middle" class="svg-title">BLE App</text>
+      <text x="105" y="67" text-anchor="middle" class="svg-label-sm">lock · ignition · boot</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.35s">
+      <rect x="30" y="128" width="150" height="46" rx="9" fill="#fff" stroke="#d8d6cf"/>
+      <text x="105" y="150" text-anchor="middle" class="svg-title">Motion Sensor</text>
+      <text x="105" y="165" text-anchor="middle" class="svg-label-sm">never sleeps</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.45s">
+      <rect x="30" y="226" width="150" height="46" rx="9" fill="#fff" stroke="#d8d6cf"/>
+      <text x="105" y="248" text-anchor="middle" class="svg-title">Main Battery</text>
+      <text x="105" y="263" text-anchor="middle" class="svg-label-sm">CAN 0x540 heartbeat</text>
+    </g>
+
+    <!-- outputs right -->
+    <g class="fade-el" style="animation-delay:.55s">
+      <rect x="680" y="30" width="150" height="46" rx="9" fill="#fff" stroke="#d8d6cf"/>
+      <text x="755" y="52" text-anchor="middle" class="svg-title">Cloud</text>
+      <text x="755" y="67" text-anchor="middle" class="svg-label-sm">telemetry when online</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.65s">
+      <rect x="680" y="128" width="150" height="46" rx="9" fill="#fff" stroke="#2f8f83"/>
+      <text x="755" y="150" text-anchor="middle" class="svg-title">Find My network</text>
+      <text x="755" y="165" text-anchor="middle" class="svg-label-sm">no SIM required</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.75s">
+      <rect x="680" y="226" width="150" height="46" rx="9" fill="#fff" stroke="#d8d6cf"/>
+      <text x="755" y="245" text-anchor="middle" class="svg-title">Actuators</text>
+      <text x="755" y="260" text-anchor="middle" class="svg-label-sm">buzzer·lock·ignition</text>
+    </g>
+
+    <!-- companion MCU -->
+    <g class="fade-el" style="animation-delay:.85s">
+      <rect x="355" y="238" width="150" height="42" rx="9" fill="#f6f6f3" stroke="#d8d6cf"/>
+      <text x="430" y="257" text-anchor="middle" class="svg-title">Companion MCU</text>
+      <text x="430" y="271" text-anchor="middle" class="svg-label-sm">boot · wheel sensor</text>
+    </g>
+
+    <g stroke="#9a9ea8" stroke-width="1.6" fill="none" marker-end="url(#ah)">
+      <path d="M180,53 L300,53 L330,120" class="flow-dash" stroke="#4457c9"/>
+      <path d="M180,151 L332,151" class="flow-dash" stroke="#4457c9"/>
+      <path d="M180,249 L348,249"/>
+      <path d="M520,140 L620,140 L670,60"/>
+      <path d="M520,151 L672,151" stroke="#2f8f83" class="flow-dash"/>
+      <path d="M520,170 L620,170 L670,244"/>
+      <path d="M430,192 L430,232"/>
+    </g>
+  </svg>
+  <p class="fig-note">The tracker runs on the auxiliary battery and never sleeps. The main battery is separate and identifies itself over CAN.</p>
+</div>
+
+<h2>1 · Power modes — saving current without disarming the vehicle</h2>
+<p>
+  A parked scooter can sit for weeks. A device that stays fully connected drains an auxiliary battery; a device that
+  properly sleeps stops protecting anything and takes seconds to boot when you need it. Neither is acceptable, so the
+  system uses three tiers that shed <em>radios</em> rather than shedding <em>awareness</em>.
+</p>
+
+<div class="fig reveal">
+  <div class="fig-title">Power state machine</div>
+  <svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three power states: Active, Derated and Low Power, with the transitions between them">
+    <defs>
+      <marker id="ah2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#6e7380"/></marker>
+    </defs>
+    <g class="fade-el">
+      <rect x="30" y="80" width="190" height="90" rx="14" fill="#eceefb" stroke="#4457c9" stroke-width="1.6"/>
+      <text x="125" y="112" text-anchor="middle" class="svg-val" fill="#313f9e">ACTIVE</text>
+      <text x="125" y="132" text-anchor="middle" class="svg-label">everything on</text>
+      <text x="125" y="150" text-anchor="middle" class="svg-label-sm">riding / in use</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.2s">
+      <rect x="305" y="80" width="190" height="90" rx="14" fill="#faf1e5" stroke="#c8863c" stroke-width="1.6"/>
+      <text x="400" y="112" text-anchor="middle" class="svg-val" fill="#96632a">DERATED</text>
+      <text x="400" y="132" text-anchor="middle" class="svg-label">no GPS · no cloud</text>
+      <text x="400" y="150" text-anchor="middle" class="svg-label-sm">stirred, not in use</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.4s">
+      <rect x="580" y="80" width="190" height="90" rx="14" fill="#eaf3ed" stroke="#4b9166" stroke-width="1.6"/>
+      <text x="675" y="112" text-anchor="middle" class="svg-val" fill="#35714f">LOW POWER</text>
+      <text x="675" y="132" text-anchor="middle" class="svg-label">+ no battery link</text>
+      <text x="675" y="150" text-anchor="middle" class="svg-label-sm">parked, undisturbed</text>
+    </g>
+
+    <g stroke="#6e7380" stroke-width="1.5" fill="none" marker-end="url(#ah2)">
+      <path d="M220,105 L300,105"/>
+      <path d="M495,105 L575,105"/>
+      <path d="M575,145 L497,145"/>
+      <path d="M300,145 L222,145"/>
+      <path d="M675,75 C675,30 125,30 125,75" stroke="#4457c9" stroke-dasharray="5 4"/>
+    </g>
+    <text x="260" y="98" text-anchor="middle" class="svg-label-sm">ign. off 2 min</text>
+    <text x="535" y="98" text-anchor="middle" class="svg-label-sm">still 2 min</text>
+    <text x="535" y="162" text-anchor="middle" class="svg-label-sm">small nudge</text>
+    <text x="261" y="162" text-anchor="middle" class="svg-label-sm">motion</text>
+    <text x="400" y="24" text-anchor="middle" class="svg-label" fill="#4457c9">any app command wakes the vehicle instantly</text>
+
+    <!-- power bars -->
+    <g transform="translate(0,196)">
+      <text x="30" y="0" class="svg-label-sm">relative standby draw</text>
+      <rect x="30" y="10" width="190" height="14" rx="7" fill="#4457c9" class="grow" style="transform-origin:left;animation-name:growX"/>
+      <rect x="305" y="10" width="118" height="14" rx="7" fill="#c8863c"/>
+      <rect x="580" y="10" width="48" height="14" rx="7" fill="#4b9166"/>
+      <text x="232" y="22" class="svg-label-sm">1.0×</text>
+      <text x="435" y="22" class="svg-label-sm">~0.6×</text>
+      <text x="640" y="22" class="svg-label-sm" fill="#35714f">~0.25×</text>
+    </g>
+  </svg>
+  <p class="fig-note">Power draw drops roughly 4× in Low Power. Bluetooth, motion sensing and anti-theft stay live in every mode.</p>
+</div>
+
+<div class="callout">
+  <span class="lab">The decision underneath all three modes</span>
+  <p>
+    The device <strong>never actually sleeps</strong> — it sheds radios instead. That costs a little standby current
+    versus a true sleep state, and buys two things I wasn't willing to trade: <strong>zero boot delay on recovery</strong>,
+    and <strong>anti-theft that's live in Low Power</strong>. A security device that has to wake up before it can
+    protect you isn't a security device.
+  </p>
+</div>
+
+<h3>What the user actually notices</h3>
+<ul>
+  <li><strong>The app always connects</strong>, in every mode. This was the non-negotiable UX requirement — a user must
+    never be told "your vehicle is asleep."</li>
+  <li>In Derated/Low Power the vehicle <strong>stops appearing online</strong> and live location goes stale. That's a
+    visible, explainable trade — not a fault.</li>
+  <li>Any app command returns it to Active. Rejoining the network takes <strong>20–40 s</strong>, so the first cloud
+    update after waking isn't instant. We surfaced this in the app rather than hiding it behind a spinner.</li>
+</ul>
+
+<h2>2 · BLE keyless control — every refusal is visible</h2>
+<p>
+  The app locks, unlocks, opens the boot and controls ignition over an authenticated Bluetooth Low Energy channel — no
+  physical key. Pairing and bonding plus characteristic-level command security prevent replay and unauthorised unlock,
+  and the design spans two radio generations (BLE 4.2 on v1.x, BLE 5.3 with Coded PHY on vB.x, roughly 4× range).
+</p>
+
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Command</th><th>Effect</th><th>Refused when</th></tr></thead>
+  <tbody>
+    <tr><td>Lock</td><td>Short beep; anti-theft <strong>armed</strong></td><td>Ignition is ON</td></tr>
+    <tr><td>Unlock / Ignition-off</td><td>If ignition ON → turns it off; otherwise double beep and <strong>disarms</strong> anti-theft</td><td class="hl">Never — unlock always wins</td></tr>
+    <tr><td>Boot unlock</td><td>Opens the boot via the companion MCU</td><td>Companion MCU unreachable</td></tr>
+    <tr><td>Ignition ON</td><td>Energises the ignition relay</td><td>Main battery not detected, <em>or</em> vehicle is locked</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>
+  Every command returns an <strong>acknowledgement</strong> — <code>ACK</code> or <code>NAK</code> with a reason. That
+  was a product requirement, not a protocol nicety. A keyless system that silently ignores you is worse than one that
+  refuses you, because the user's next move is to press it again, then assume the vehicle is broken. Naming the reason
+  turns a support ticket into a UI string.
+</p>
+
+<div class="callout">
+  <span class="lab">A hardware quirk that became a spec clause</span>
+  <p>
+    The buzzer is powered from the ignition circuit, so producing a lock/unlock beep means briefly raising the ignition
+    line. That is emphatically <strong>not</strong> an ignition-on event — the vehicle stays logically off. Writing that
+    distinction into the spec explicitly is what stopped it being "discovered" later as a safety bug by someone reading
+    the telemetry.
+  </p>
+</div>
+
+<h2>3 · Main-battery detection — asymmetric on purpose</h2>
+<p>
+  The main battery announces itself with a repeating CAN heartbeat, and ignition permission depends on it. The detection
+  logic is deliberately lopsided: <strong>quick to trust, slow to distrust.</strong>
+</p>
+
+<div class="fig reveal">
+  <div class="fig-title">Battery presence &amp; ignition interlock</div>
+  <svg viewBox="0 0 800 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Battery heartbeat timing: present is instant, absent for power logic at 10 seconds, absent for ignition at 30 seconds">
+    <line x1="60" y1="70" x2="740" y2="70" stroke="#e8e7e2" stroke-width="2"/>
+    <path d="M60,70 L740,70" stroke="#4457c9" stroke-width="3" class="draw" fill="none"/>
+
+    <g class="fade-el">
+      <circle cx="60" cy="70" r="7" fill="#4b9166"/>
+      <text x="60" y="48" text-anchor="middle" class="svg-title" fill="#35714f">PRESENT</text>
+      <text x="60" y="98" text-anchor="middle" class="svg-label-sm">1 heartbeat</text>
+      <text x="60" y="112" text-anchor="middle" class="svg-label-sm">— instant</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.35s">
+      <circle cx="330" cy="70" r="7" fill="#c8863c"/>
+      <text x="330" y="48" text-anchor="middle" class="svg-title" fill="#96632a">silent 10 s</text>
+      <text x="330" y="98" text-anchor="middle" class="svg-label-sm">absent for</text>
+      <text x="330" y="112" text-anchor="middle" class="svg-label-sm">power logic</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.7s">
+      <circle cx="660" cy="70" r="7" fill="#c05e52"/>
+      <text x="660" y="48" text-anchor="middle" class="svg-title" fill="#9c463c">silent 30 s</text>
+      <text x="660" y="98" text-anchor="middle" class="svg-label-sm">absent for ignition</text>
+      <text x="660" y="112" text-anchor="middle" class="svg-label-sm">→ forced OFF</text>
+    </g>
+
+    <g class="fade-el" style="animation-delay:.9s">
+      <rect x="480" y="146" width="260" height="62" rx="10" fill="#faedeb" stroke="#c05e52"/>
+      <text x="610" y="169" text-anchor="middle" class="svg-title" fill="#9c463c">Battery removed while riding</text>
+      <text x="610" y="189" text-anchor="middle" class="svg-label">ignition cut automatically — no app needed</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.55s">
+      <rect x="60" y="146" width="320" height="62" rx="10" fill="#f6f6f3" stroke="#d8d6cf"/>
+      <text x="220" y="169" text-anchor="middle" class="svg-title">Single dropped CAN message</text>
+      <text x="220" y="189" text-anchor="middle" class="svg-label">never causes a false "battery removed"</text>
+    </g>
+  </svg>
+</div>
+
+<p>
+  The asymmetry is the whole design. A symmetric threshold would either be so twitchy that ordinary CAN jitter reads as
+  a removed battery, or so slow that a genuinely removed battery leaves the ignition relay live. Splitting it into two
+  timers — one for power logic, a longer one for ignition — lets each side of the system be as cautious as its
+  consequences warrant.
+</p>
+
+<h2>4 · Anti-theft — three detectors, one alarm</h2>
+<p>
+  Armed by Lock, disarmed by Unlock, and fully automatic in between. It runs in <strong>every power mode</strong>,
+  including Low Power, which is the requirement everything else was designed around.
+</p>
+
+<div class="fig reveal">
+  <div class="fig-title">Detection &amp; alarm loop</div>
+  <svg viewBox="0 0 820 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three independent detectors feed one alarm which repeats in ten second cycles until the threat stops or unlock is sent">
+    <defs><marker id="ah3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#6e7380"/></marker></defs>
+
+    <g class="fade-el">
+      <rect x="20" y="20" width="180" height="46" rx="9" fill="#fff" stroke="#2f8f83" stroke-width="1.5"/>
+      <text x="110" y="41" text-anchor="middle" class="svg-title">Wheel sensor</text>
+      <text x="110" y="56" text-anchor="middle" class="svg-label-sm">rotation detected</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.15s">
+      <rect x="20" y="98" width="180" height="46" rx="9" fill="#fff" stroke="#7c6bc4" stroke-width="1.5"/>
+      <text x="110" y="119" text-anchor="middle" class="svg-title">Significant motion</text>
+      <text x="110" y="134" text-anchor="middle" class="svg-label-sm">lifted / wheeled</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.3s">
+      <rect x="20" y="176" width="180" height="46" rx="9" fill="#fff" stroke="#c8863c" stroke-width="1.5"/>
+      <text x="110" y="197" text-anchor="middle" class="svg-title">Small nudge</text>
+      <text x="110" y="212" text-anchor="middle" class="svg-label-sm">tamper attempt</text>
+    </g>
+
+    <g class="fade-el" style="animation-delay:.45s">
+      <rect x="285" y="88" width="150" height="66" rx="10" fill="#f6f6f3" stroke="#d8d6cf"/>
+      <text x="360" y="114" text-anchor="middle" class="svg-title">Debounce</text>
+      <text x="360" y="132" text-anchor="middle" class="svg-label-sm">one-off bump</text>
+      <text x="360" y="146" text-anchor="middle" class="svg-label-sm">→ no alarm</text>
+    </g>
+
+    <g class="fade-el" style="animation-delay:.6s">
+      <rect x="520" y="80" width="180" height="82" rx="12" fill="#faedeb" stroke="#c05e52" stroke-width="1.8"/>
+      <text x="610" y="108" text-anchor="middle" class="svg-val" fill="#9c463c">ALARM · 10 s</text>
+      <text x="610" y="128" text-anchor="middle" class="svg-label">buzzer + wheel lock</text>
+      <text x="610" y="145" text-anchor="middle" class="svg-label">+ ignition line held</text>
+      <circle cx="610" cy="80" r="5" fill="#c05e52" class="pulse-el"/>
+    </g>
+
+    <g stroke="#6e7380" stroke-width="1.5" fill="none" marker-end="url(#ah3)">
+      <path d="M200,43 L240,43 L240,110 L278,110"/>
+      <path d="M200,121 L278,121"/>
+      <path d="M200,199 L240,199 L240,132 L278,132"/>
+      <path d="M435,121 L512,121" stroke="#c05e52"/>
+      <path d="M700,121 C770,121 780,40 610,40 L610,72" stroke="#c05e52" stroke-dasharray="5 4"/>
+    </g>
+    <text x="700" y="32" text-anchor="middle" class="svg-label-sm" fill="#9c463c">repeats while threat persists</text>
+
+    <g class="fade-el" style="animation-delay:.8s">
+      <rect x="520" y="196" width="180" height="42" rx="9" fill="#eaf3ed" stroke="#4b9166" stroke-width="1.5"/>
+      <text x="610" y="222" text-anchor="middle" class="svg-title" fill="#35714f">Unlock always wins</text>
+    </g>
+    <path d="M610,196 L610,168" stroke="#4b9166" stroke-width="1.5" marker-end="url(#ah3)" fill="none"/>
+  </svg>
+</div>
+
+<h3>Why three detectors instead of one good one</h3>
+<p>
+  Redundancy across <em>independent channels</em>, not sensitivity. The wheel sensor and the motion sensor are separate
+  hardware paths, so <strong>detection keeps working even if the motion sensor fails</strong>. A single-sensor design
+  has a single point of failure that is silent — the alarm simply never fires, and nobody discovers it until after a
+  theft.
+</p>
+
+<h3>The threshold is a product decision, not a constant</h3>
+<p>
+  Each detector has a debounce so a one-off bump or a passing truck doesn't raise an alarm. Where that debounce sits is
+  the single most consequential number in the system, and the two failure modes are not symmetric:
+</p>
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Tuned…</th><th>Failure mode</th><th>Consequence</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Too sensitive</td><td>False alarms from wind, neighbours, traffic</td>
+      <td class="hl">The user disables the feature — it then protects nothing. Terminal.</td>
+    </tr>
+    <tr>
+      <td>Too conservative</td><td>A careful thief stays under the bar</td>
+      <td>Fails in the case it exists for, but degrades to GPS recovery. Bad, recoverable.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p>
+  Because the failure modes are asymmetric, I specified a deliberate <strong>bias toward fewer false alarms</strong>, and
+  tuned against real parked-vehicle data rather than bench shakes — bench conditions contain none of the noise that
+  causes the problem. The 10-second alarm cycle exists for the same reason: it re-evaluates rather than latching, so a
+  false trigger costs ten seconds of noise instead of a screaming vehicle in a car park.
+</p>
+
+<h2>5 · Reset safety — what survives a power cut</h2>
+<p>
+  Vehicles lose power. The question is what the device believes when it comes back, and the answer differs per item
+  because the risk differs per item.
+</p>
+<div class="table-scroll">
+<table>
+  <thead><tr><th>State</th><th>Survives reset?</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>Locked / unlocked</td><td class="hl">Yes — restored from NV memory</td><td>A reset must never silently unlock a parked vehicle. Anti-theft re-arms automatically.</td></tr>
+    <tr><td>Ignition on/off</td><td>No — always off</td><td>Safety. A relay must only energise on a fresh, deliberate command — never on a boot sequence.</td></tr>
+    <tr><td>Power mode</td><td>No — starts Active</td><td>Safest default; re-enters Low Power normally within minutes.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>
+  So a vehicle locked before a power interruption is <strong>still locked and still guarded</strong> afterwards, while a
+  rider whose vehicle resets mid-journey must re-send Ignition ON. That asymmetry is intentional: security state is
+  restored, actuator state never is.
+</p>
+
+<h2>6 · Find My — recovery when the network isn't there</h2>
+<p>
+  Every network-dependent locator has the same hole: the moment a thief puts the vehicle in a basement, removes the
+  main battery, or the SIM loses coverage, it stops reporting. So the tracker continuously broadcasts an Apple
+  <strong>Find My (OpenHaystack)</strong> beacon over Bluetooth. Any passing iPhone silently relays the sighting to
+  Apple's network, where <strong>only the owner</strong> can decrypt the position.
+</p>
+
+<div class="fig reveal">
+  <div class="fig-title">Offline recovery path</div>
+  <svg viewBox="0 0 820 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vehicle with no SIM broadcasts a BLE beacon to a passer-by's iPhone, which relays an encrypted report to Apple's network, decrypted only by the owner">
+    <defs><marker id="ah4" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2f8f83"/></marker></defs>
+    <g class="fade-el">
+      <rect x="10" y="40" width="170" height="66" rx="11" fill="#f6f6f3" stroke="#d8d6cf"/>
+      <text x="95" y="66" text-anchor="middle" class="svg-title">Vehicle</text>
+      <text x="95" y="84" text-anchor="middle" class="svg-label-sm">no SIM · no coverage</text>
+      <text x="95" y="98" text-anchor="middle" class="svg-label-sm">aux battery only</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.25s">
+      <rect x="235" y="40" width="170" height="66" rx="11" fill="#fff" stroke="#2f8f83"/>
+      <text x="320" y="70" text-anchor="middle" class="svg-title">Passer-by's iPhone</text>
+      <text x="320" y="88" text-anchor="middle" class="svg-label-sm">relays silently</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.5s">
+      <rect x="460" y="40" width="170" height="66" rx="11" fill="#fff" stroke="#2f8f83"/>
+      <text x="545" y="70" text-anchor="middle" class="svg-title">Apple Find My</text>
+      <text x="545" y="88" text-anchor="middle" class="svg-label-sm">encrypted report</text>
+    </g>
+    <g class="fade-el" style="animation-delay:.75s">
+      <rect x="685" y="40" width="125" height="66" rx="11" fill="#eaf3ed" stroke="#4b9166"/>
+      <text x="747" y="70" text-anchor="middle" class="svg-title" fill="#35714f">Owner</text>
+      <text x="747" y="88" text-anchor="middle" class="svg-label-sm">only decryptor</text>
+    </g>
+    <g stroke="#2f8f83" stroke-width="1.8" fill="none" marker-end="url(#ah4)">
+      <path d="M180,73 L228,73" class="flow-dash"/>
+      <path d="M405,73 L453,73" class="flow-dash"/>
+      <path d="M630,73 L678,73" class="flow-dash"/>
+    </g>
+    <text x="204" y="60" text-anchor="middle" class="svg-label-sm">BLE beacon</text>
+    <text x="130" y="130" class="svg-label-sm" fill="#2f8f83">runs in every power mode — Bluetooth never switches off</text>
+  </svg>
+</div>
+
+<p>
+  It coexists with the app rather than replacing it: the device advertises the Find My beacon <em>and</em> keeps its
+  normal <code>VEC-&lt;IMEI&gt;</code> name and connectable services simultaneously, so lock/unlock/ignition still work
+  exactly as before. The Bluetooth address is derived from the device's Find My key, so each vehicle appears as its own
+  distinct tag.
+</p>
+
+<div class="callout">
+  <span class="lab">A provisioning requirement I had to escalate</span>
+  <p>
+    Each unit needs its <strong>own unique Find My key</strong>. Devices sharing one key are indistinguishable in the
+    network and cannot be located individually — which would quietly turn the whole feature into theatre at fleet scale.
+    This is a manufacturing-line requirement, not a firmware one, so it had to be raised as a cross-team dependency
+    before production rather than discovered in the field.
+  </p>
+</div>
+
+<h2>How the pieces interact</h2>
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Interaction</th><th>Rule</th></tr></thead>
+  <tbody>
+    <tr><td>Anti-theft vs. power saving</td><td class="hl">Anti-theft outranks power saving. An alarm can fire in any mode, and temporarily drives the ignition line to sound the buzzer.</td></tr>
+    <tr><td>Ignition vs. power mode</td><td>Ignition depends on the CAN battery link, which is off in Low Power. The app command wakes the device first, so the link is restored — but the vehicle must be awake for ignition to be permitted.</td></tr>
+    <tr><td>Lock vs. power mode</td><td>Independent. Locking doesn't change the power mode; the power mode doesn't disarm anti-theft.</td></tr>
+    <tr><td>Motion as shared trigger</td><td>A small nudge lifts Low Power → Derated; significant motion returns it to Active <em>and</em> can raise an alarm if locked.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Outcome</h2>
+<div class="stat-row">
+  <div class="stat-pill"><div class="v">~4×</div><div class="k">Lower standby draw in Low Power</div></div>
+  <div class="stat-pill"><div class="v">0 s</div><div class="k">Boot delay on recovery — never sleeps</div></div>
+  <div class="stat-pill"><div class="v">3</div><div class="k">Independent theft detectors</div></div>
+  <div class="stat-pill"><div class="v">2</div><div class="k">HW generations, one codebase</div></div>
+</div>
+<ul>
+  <li><strong>Security that survives power saving</strong> — anti-theft and BLE live in every mode, including the
+    deepest one.</li>
+  <li><strong>Keyless control with no silent failures</strong> — every command ACKs or NAKs with a reason.</li>
+  <li><strong>Ignition physically gated on a live main battery</strong>, with automatic cut-off if it's removed mid-ride.</li>
+  <li><strong>Recovery without a network</strong> via the Find My beacon — works with no SIM, no coverage, no cloud.</li>
+  <li><strong>Safe reset semantics</strong>: lock state restored, actuators never auto-restored.</li>
+</ul>
+
+<h2>What I'd take to the next one</h2>
+<p>
+  Two things. First, <strong>on an integrated system, write the interaction rules before the feature specs.</strong> The
+  most valuable page in this document is the interaction table — not because it's clever, but because every one of those
+  rows was a real argument that got settled once instead of five times. Second, <strong>asymmetric thresholds are
+  usually right.</strong> Battery-present versus battery-absent, false alarm versus missed tamper, lock state versus
+  ignition state — in each case the two errors have different costs, and matching the timing to the cost beats picking
+  one "correct" value.
+</p>
+
+</div>
+</div>
+
+<div class="next-cs">
+  <div class="wrap" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center">
+    <span style="color:var(--text-faint);font-family:var(--mono);font-size:.8rem">Next case study</span>
+    <a class="btn btn-ghost" href="safnect.html">SAF Connect — Healthcare Platform →</a>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© <span class="yr">2026</span> Ahraz Shamim</span>
+    <span>
+      <a href="mailto:shamimahraz@gmail.com">Email</a> ·
+      <a href="https://www.linkedin.com/in/ahraz-shamim-6b9876194/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="../assets/Ahraz-Shamim-Resume.pdf" download>Résumé</a>
+    </span>
+  </div>
+</footer>
+<script src="../site.js"></script>
+</body>
+</html>
