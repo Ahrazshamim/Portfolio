@@ -19,19 +19,17 @@ Then open `http://localhost:5500` yourself — the command doesn't launch a brow
 
 ---
 
-## Step 2 — Turn on the contact form (2 minutes)
+## Step 2 — The contact form
 
-The form is wired but not connected yet. It's currently a placeholder — if someone submits, they'll see a message telling them to email you directly.
+The form works out of the box with no signup needed. When a visitor submits it, `site.js` builds a `mailto:` link from their name, email and message and opens their email app with it pre-filled, addressed to `shamimahraz@gmail.com`. They still have to hit send in their own email app; nothing is delivered automatically on their behalf.
 
-1. Go to **[formspree.io](https://formspree.io)** and sign up free with `shamimahraz@gmail.com`.
-2. Create a new form. Formspree gives you an endpoint like `https://formspree.io/f/xyzabcde`.
-3. Copy the ID at the end (`xyzabcde`).
-4. Open `index.html`, find `YOUR_FORM_ID` (one occurrence, around line 375), and replace it with your ID.
-5. Confirm your email when Formspree sends the verification.
+That means there is nothing to configure here. If you would rather have submissions land in your inbox automatically without the visitor's email app opening, switch to a form backend such as **[formspree.io](https://formspree.io)**:
 
-Free tier: **50 submissions/month**, which is well above what a portfolio contact form receives.
+1. Sign up free with `shamimahraz@gmail.com` and create a form to get an endpoint like `https://formspree.io/f/xyzabcde`.
+2. In `index.html`, give the `<form id="contact-form">` an `action="https://formspree.io/f/xyzabcde"` and `method="POST"` again.
+3. In `site.js`, replace the `mailto:` submit handler with a `fetch(form.action, { method: 'POST', body: new FormData(form) })` call.
 
-*Prefer to skip it?* Delete the `<form>` block — your email, phone and LinkedIn are already listed right next to it.
+*Prefer to skip forms entirely?* Delete the `<form>` block — your email, phone and LinkedIn are already listed right next to it.
 
 ---
 

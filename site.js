@@ -181,8 +181,12 @@
           '<div class="rec-who"><div class="rec-av">' + esc(initials(r.name)) + '</div><div>' +
           '<div class="rec-nm">' + esc(r.name) + '</div>' +
           '<div class="rec-rl">' + esc(r.role || '') + '</div>' +
+          (r.source ? '<div class="rec-src">' + esc(r.source) + '</div>' : '') +
           '</div></div></div>';
       }).join('');
+    }
+    function renderAll(submitted) {
+      render((window.SEED_RECOMMENDATIONS || []).concat(submitted || []));
     }
 
     if (configured) {
@@ -190,10 +194,10 @@
         headers: { apikey: CFG.anonKey, Authorization: 'Bearer ' + CFG.anonKey }
       })
         .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('fetch failed')); })
-        .then(render)
-        .catch(function () { render(window.SEED_RECOMMENDATIONS || []); });
+        .then(renderAll)
+        .catch(function () { renderAll([]); });
     } else {
-      render(window.SEED_RECOMMENDATIONS || []);
+      renderAll([]);
     }
 
     /* submission */
@@ -241,32 +245,24 @@
     }
   }
 
-  /* ---- contact form ---- */
+  /* ---- contact form (opens the visitor's email app, pre-filled) ---- */
   var form = document.getElementById('contact-form');
   if (form) {
     var note = document.getElementById('form-note');
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      if (form.action.indexOf('YOUR_FORM_ID') !== -1) {
-        note.textContent = 'Form not connected yet. Please email shamimahraz@gmail.com directly.';
-        note.style.color = 'var(--accent)';
-        return;
-      }
-      var btn = form.querySelector('button[type=submit]');
-      btn.disabled = true; btn.textContent = 'Sending…';
-      fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-        .then(function (r) {
-          if (!r.ok) throw new Error('bad');
-          form.reset();
-          btn.textContent = 'Message sent ✓';
-          note.textContent = 'Thanks, I got it. I will reply soon.';
-          note.style.color = 'var(--c6)';
-        })
-        .catch(function () {
-          btn.disabled = false; btn.textContent = 'Send message';
-          note.textContent = 'Something went wrong. Please email shamimahraz@gmail.com instead.';
-          note.style.color = 'var(--c5)';
-        });
+      var name = form.name.value.trim();
+      var email = form.email.value.trim();
+      var message = form.message.value.trim();
+      var subject = 'Portfolio message from ' + name;
+      var body = message + '\n\nFrom: ' + name + ' (' + email + ')';
+      var mailto = 'mailto:shamimahraz@gmail.com' +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+      window.location.href = mailto;
+      form.reset();
+      note.textContent = 'Your email app should open with the message ready to send. If it does not, email shamimahraz@gmail.com directly.';
+      note.style.color = 'var(--c6)';
     });
   }
 })();

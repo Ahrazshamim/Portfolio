@@ -513,6 +513,10 @@ a.card:hover .arrow { color: var(--accent); transform: translate(4px,-4px); }
 }
 .rec-nm { font-family: var(--display); font-size: .92rem; font-weight: 600; letter-spacing: -.015em; }
 .rec-rl { font-size: .78rem; color: var(--text-dim); line-height: 1.35; }
+.rec-src {
+  font-family: var(--mono); font-size: .66rem; color: var(--accent);
+  margin-top: 5px; letter-spacing: .01em;
+}
 .rec-empty {
   grid-column: 1 / -1; text-align: center; padding: 40px 20px;
   color: var(--text-dim); font-size: .9rem;
