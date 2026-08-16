@@ -171,8 +171,8 @@
     }
     function render(rows) {
       if (!rows || !rows.length) {
-        recWrap.innerHTML = '<div class="rec-empty">No recommendations published yet — ' +
-          'if we’ve worked together, yours could be the first.</div>';
+        recWrap.innerHTML = '<div class="rec-empty">No recommendations are published yet. ' +
+          'If we have worked together, yours could be the first.</div>';
         return;
       }
       recWrap.innerHTML = rows.map(function (r) {
@@ -210,7 +210,7 @@
           approved: false
         };
         if (!configured) {
-          recNote.textContent = 'Submissions aren’t connected yet — please email shamimahraz@gmail.com and I’ll add it.';
+          recNote.textContent = 'Submissions are not connected yet. Please email shamimahraz@gmail.com and I will add it.';
           recNote.style.color = 'var(--c3)';
           return;
         }
@@ -229,7 +229,7 @@
             if (!r.ok) throw new Error('bad');
             recForm.reset();
             btn.textContent = 'Submitted ✓';
-            recNote.textContent = 'Thank you — it’s with me for a quick review and will appear here shortly.';
+            recNote.textContent = 'Thank you. It is with me for a quick review and will appear here shortly.';
             recNote.style.color = 'var(--c6)';
           })
           .catch(function () {
@@ -248,7 +248,7 @@
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
       if (form.action.indexOf('YOUR_FORM_ID') !== -1) {
-        note.textContent = 'Form not connected yet — email shamimahraz@gmail.com directly.';
+        note.textContent = 'Form not connected yet. Please email shamimahraz@gmail.com directly.';
         note.style.color = 'var(--accent)';
         return;
       }
@@ -259,7 +259,7 @@
           if (!r.ok) throw new Error('bad');
           form.reset();
           btn.textContent = 'Message sent ✓';
-          note.textContent = 'Thanks — I got it. I’ll reply soon.';
+          note.textContent = 'Thanks, I got it. I will reply soon.';
           note.style.color = 'var(--c6)';
         })
         .catch(function () {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Multi-Source Geolocation System — Ahraz Shamim</title>
+<title>Multi-Source Geolocation System, Ahraz Shamim</title>
 <meta name="description" content="Case study: authoring the PRD for a GNSS + cellular + WiFi geolocation system that degrades gracefully across two hardware generations from a single firmware codebase.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +33,7 @@
     <h1 class="cs-title">Multi-Source Geolocation System</h1>
     <p class="lede">
       Every connected vehicle needs to answer one question reliably: <em>where is it?</em> The hard part isn't getting a
-      GPS fix — it's still answering when there's no sky, no cell tower, or the customer bought last year's hardware. I
+      GPS fix. It's still answering when there's no sky, no cell tower, or the customer bought last year's hardware. I
       authored the PRD that made that answer consistent across all of it.
     </p>
     <dl class="cs-facts">
@@ -56,11 +56,11 @@
   Our IoT module reports vehicle position in its heartbeat. That position was GNSS-only, which works beautifully right
   up until it doesn't: underground parking, dense urban canyons, a scooter parked inside a shop, a cold start with no
   almanac. In those cases the device reported nothing useful, and the customer-facing map showed a vehicle frozen at its
-  last known point — indistinguishable, from the outside, from a vehicle that hadn't moved.
+  last known point. From the outside, it looked no different from a vehicle that hadn't moved.
 </p>
 <p>
-  There was a second problem underneath it. We ship <strong>two hardware generations</strong> in the field
-  simultaneously — v1.x and vB.x, on the EC200U-CNAA modem family — with different radio capabilities. Any feature that
+  There was a second problem underneath it. We ship <strong>two hardware generations</strong> in the field at the same
+  time, v1.x and vB.x, on the EC200U-CNAA modem family, with different radio capabilities. Any feature that
   assumes the newer radio either breaks on older units or forces us to fork the firmware. Neither is acceptable on a
   product line where the same team maintains both.
 </p>
@@ -69,7 +69,7 @@
   <span class="lab">The actual product question</span>
   <p>
     Not "how do we make GPS better." It was: <strong>how do we produce a position, with an honest confidence attached,
-    under every condition our hardware might be in — from one codebase?</strong> Framing it that way is what made
+    under every condition our hardware might be in, from one codebase?</strong> Framing it that way is what made
     graceful degradation a requirement instead of an afterthought.
   </p>
 </div>
@@ -81,7 +81,7 @@
   source "wins."
 </p>
 <p>
-  This was deliberate and it was the decision I defended hardest. Resolution logic changes often — you swap geolocation
+  This was deliberate and it was the decision I defended hardest. Resolution logic changes often: you swap geolocation
   API providers, you tune weighting, you fix a bad tower database. Collection logic changes rarely. Putting resolution
   on the device would have meant a firmware campaign every time we wanted to improve accuracy; putting it on the backend
   means a deploy. It also let firmware and backend teams work in parallel against a contract rather than serially
@@ -138,7 +138,7 @@
       <rect x="560" y="226" width="210" height="24" rx="12" fill="#eceefb"/>
       <text x="665" y="242" text-anchor="middle" class="svg-label" fill="#313f9e">every fix labelled CEP68 · HDOP</text>
     </g>
-    <text x="410" y="286" text-anchor="middle" class="svg-label-sm">A unit that can't perform a scan type omits the field — the backend falls through rather than failing silently</text>
+    <text x="410" y="286" text-anchor="middle" class="svg-label-sm">A unit that can't perform a scan type omits the field, and the backend falls through rather than failing silently</text>
   </svg>
 </div>
 
@@ -165,7 +165,7 @@
       <td>Cellular</td>
       <td>Last-resort fallback</td>
       <td>Single Cell-ID for a coarse position, plus <strong>multilateration across neighbour cells (CEL_MULTI)</strong>
-        when enough towers are visible. Always available if the device is online at all — which is the point.</td>
+        when enough towers are visible. Always available if the device is online at all, which is the point.</td>
     </tr>
   </tbody>
 </table>
@@ -175,13 +175,13 @@
 <p>
   This wasn't sold internally as an accuracy improvement. It was sold as removing a failure mode:
   <strong>location is only valuable if it never goes dark.</strong> A tracking product that fails in basements and
-  tunnels isn't a tracking product — it's a fair-weather convenience, and fleet operators had learned not to rely on it.
+  tunnels isn't a tracking product. It's a fair-weather convenience, and fleet operators had learned not to rely on it.
 </p>
 <div class="table-scroll">
 <table>
   <thead><tr><th>Impact area</th><th>Mechanism</th><th>Business outcome</th></tr></thead>
   <tbody>
-    <tr><td>Asset recovery</td><td>No location blackout</td><td class="hl">Fewer unrecoverable or stolen vehicles — direct protection of fleet capital</td></tr>
+    <tr><td>Asset recovery</td><td>No location blackout</td><td class="hl">Fewer unrecoverable or stolen vehicles: direct protection of fleet capital</td></tr>
     <tr><td>Customer trust</td><td>Always-on reliability</td><td>Stronger retention and word-of-mouth</td></tr>
     <tr><td>Sales differentiation</td><td>Cross-platform find-my-device</td><td>Wins deals against GPS-only competitors</td></tr>
     <tr><td>Operational cost</td><td>Smart radio fallback hierarchy</td><td>Coverage without excess data or power cost</td></tr>
@@ -191,7 +191,7 @@
 <p>
   There was a second, subtler problem the PRD had to solve: the <strong>last-metre problem</strong>. Even with a good
   position, a rider standing in a large parking lot still can't tell which of forty identical scooters is theirs. So the
-  scope included a close-range BLE "find my vehicle" capability — and deliberately covered
+  scope included a close-range BLE "find my vehicle" capability, and it deliberately covered
   <strong>both Apple's Find My and Google's Find My Device networks</strong>, scoped around each ecosystem's distinct
   protocol and privacy model, so the feature is platform-agnostic to the end user rather than locking half the fleet
   out.
@@ -202,7 +202,7 @@
 <table>
   <thead><tr><th>Stakeholder</th><th>Their priority</th><th>How I aligned them</th></tr></thead>
   <tbody>
-    <tr><td>Embedded / firmware</td><td>Power &amp; radio budget</td><td class="hl">Defined a fallback hierarchy — not all radios on at once</td></tr>
+    <tr><td>Embedded / firmware</td><td>Power &amp; radio budget</td><td class="hl">Defined a fallback hierarchy: not all radios on at once</td></tr>
     <tr><td>Cloud / data team</td><td>Positioning accuracy vs. cost</td><td>Use the most accurate available source within the data budget</td></tr>
     <tr><td>iOS &amp; Android integration</td><td>Different BLE protocols and privacy models</td><td>Scoped both Apple Find My and Google Find My Device explicitly</td></tr>
     <tr><td>Fleet customers</td><td>Reliable recovery</td><td>Set honest coverage expectations for GNSS-denied zones</td></tr>
@@ -217,7 +217,7 @@
 <p>
   Rather than writing "on vB.x, do X," the PRD expresses requirements against <em>capabilities the device reports about
   itself</em>. A unit that can't do a given scan type simply omits that field; the backend sees the omission and falls
-  through to the next source. One firmware codebase, both hardware generations, and — critically — a device that
+  through to the next source. One firmware codebase, both hardware generations, and, critically, a device that
   <strong>degrades visibly rather than failing silently</strong>. Silent failure was the outcome I was most concerned
   about, because it's the one that reaches the customer as "your product is wrong" instead of "your product is
   uncertain."
@@ -225,7 +225,7 @@
 
 <h3>2. Positions carry their own uncertainty</h3>
 <p>
-  Every reported position is labelled with confidence — <strong>CEP68</strong> and <strong>HDOP</strong>. This sounds
+  Every reported position is labelled with confidence: <strong>CEP68</strong> and <strong>HDOP</strong>. This sounds
   like a technical detail and is actually a product feature: it lets downstream consumers (geofencing, theft alerts,
   trip reconstruction) make different decisions with a 5-metre fix versus a 900-metre cell-tower estimate. Without it,
   every consumer has to guess, and they all guess differently.
@@ -235,7 +235,7 @@
 <p>
   Scan parameters are remotely configurable over <strong>MQTT</strong> and stored in <strong>non-volatile memory</strong>
   so they survive reboot. This turns accuracy tuning into an operational lever instead of a release. When a specific
-  customer's fleet operates somewhere with unusual radio conditions, we adjust their fleet — we don't ship a firmware
+  customer's fleet operates somewhere with unusual radio conditions, we adjust their fleet. We don't ship a firmware
   campaign to everyone.
 </p>
 
@@ -244,12 +244,12 @@
   WiFi scanning costs current, and these devices sit in <strong>PSM (Power Saving Mode)</strong> on a battery that also
   has to start a vehicle. The PRD makes the power budget an explicit interlock: scan configuration cannot be set to
   values that violate sleep-mode current limits. This is the requirement that most obviously came from having written
-  firmware — a purely product-side PRD would have specified the scan behaviour and discovered the brownout in the field.
+  firmware. A purely product-side PRD would have specified the scan behaviour and discovered the brownout in the field.
 </p>
 
 <h2>Risk &amp; failure-mode matrix</h2>
 <p>
-  The section of the PRD I consider the most valuable wasn't the requirements — it was the failure-mode matrix. Each row
+  The section of the PRD I consider the most valuable wasn't the requirements. It was the failure-mode matrix. Each row
   is a plausible, well-intentioned change by one team that silently breaks another, with a named mitigation and a
   sign-off owner.
 </p>
@@ -259,7 +259,7 @@
   <tbody>
     <tr>
       <td>Firmware drops a cell field to save payload</td>
-      <td>Backend's last-resort fallback stops working — but only for devices with no GNSS and no WiFi, so it never shows
+      <td>Backend's last-resort fallback stops working, but only for devices with no GNSS and no WiFi, so it never shows
         up in normal testing</td>
       <td>Cell fields declared mandatory in the contract; backend rejects and alerts on missing fields rather than
         defaulting</td>
@@ -288,7 +288,7 @@
   <span class="lab">Why write it in EARS</span>
   <p>
     EARS ("the system shall… when… while…") forces every requirement to state its trigger and precondition. On a
-    multi-source, multi-hardware feature that's not pedantry — it's the difference between a requirement that survives
+    multi-source, multi-hardware feature that's not pedantry. It's the difference between a requirement that survives
     handoff to a firmware engineer and one that generates three Slack threads. It also made the capability-aware
     requirements expressible at all, since the precondition <em>is</em> the capability.
   </p>
@@ -302,13 +302,13 @@
   <div class="stat-pill"><div class="v">&lt; 3 m</div><div class="k">GNSS accuracy target in India</div></div>
 </div>
 <ul>
-  <li><strong>A position under every condition</strong> — GNSS where there's sky, WiFi indoors and in urban canyons,
+  <li><strong>A position under every condition</strong>: GNSS where there's sky, WiFi indoors and in urban canyons,
     cellular everywhere else. No more frozen dots.</li>
   <li><strong>Sub-3 m accuracy target in India</strong> via multi-constellation GNSS with SBAS/GAGAN augmentation, and
     dramatically faster cold-start fixes through A-GNSS/SUPL.</li>
   <li><strong>One firmware codebase across two hardware generations</strong>, degrading gracefully and visibly instead of
     forking or failing silently.</li>
-  <li><strong>Accuracy became an operational lever</strong> — tunable per fleet over MQTT, no firmware campaign
+  <li><strong>Accuracy became an operational lever</strong>: tunable per fleet over MQTT, no firmware campaign
     required.</li>
   <li><strong>Two teams shipped in parallel</strong> against a documented contract, with the failure-mode matrix catching
     the cross-team breakages before they reached the field.</li>
@@ -319,7 +319,7 @@
   The reusable lesson isn't about radios. It's that on any system spanning two teams, <strong>the interface contract and
   the failure-mode matrix are the product artifacts that matter most</strong>. Requirements describe the happy path,
   which everyone already agrees on. The matrix describes the ways reasonable people break each other's work while acting
-  in good faith — and writing it down is what turns a dependency into a managed one.
+  in good faith, and writing it down is what turns a dependency into a managed one.
 </p>
 
 </div>

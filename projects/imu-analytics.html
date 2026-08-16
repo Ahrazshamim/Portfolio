@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IMU Crash Detection &amp; Driver Analytics — Ahraz Shamim</title>
-<meta name="description" content="Case study: turning an unused 6-axis IMU already in the field into crash detection, driver scoring and a new insurance-telematics revenue line — a pure software play on deployed hardware.">
+<title>IMU Crash Detection &amp; Driver Analytics: Ahraz Shamim</title>
+<meta name="description" content="Case study: turning an unused 6-axis IMU already in the field into crash detection, driver scoring, and a new insurance-telematics revenue line, through a pure software play on deployed hardware.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,12 +32,12 @@
     <p class="eyebrow">Case study · Monetising deployed hardware</p>
     <h1 class="cs-title">IMU Crash Detection &amp;<br>Driver Behaviour Analytics</h1>
     <p class="lede">
-      The sensor was already in every device we'd ever shipped. Nobody was reading it. This project turned that dormant
-      6-axis IMU into crash alerts, driver risk scores and the foundation of an insurance-telematics revenue line —
-      with no new hardware, deployed over the air to vehicles already in the field.
+      The sensor was already in every device we had ever shipped, and nobody was reading it. This project turned that
+      dormant 6-axis IMU into crash alerts, driver risk scores, and the foundation of an insurance-telematics revenue
+      line, all without new hardware and deployed over the air to vehicles already in the field.
     </p>
     <dl class="cs-facts">
-      <div><dt>My role</dt><dd>Product proxy — business case, PRD, stakeholder alignment</dd></div>
+      <div><dt>My role</dt><dd>Product proxy: business case, PRD, and stakeholder alignment</dd></div>
       <div><dt>Company</dt><dd>Vecmocon Technologies</dd></div>
       <div><dt>Product line</dt><dd>₹40L/month IoT platform</dd></div>
       <div><dt>Play type</dt><dd class="hl">Pure software/analytics on existing hardware</dd></div>
@@ -54,29 +54,30 @@
 <h2>The gap</h2>
 <p>
   Vecmocon's IoT platform powers electric two- and three-wheeler fleets across India. Before this project it tracked
-  <em>where</em> a vehicle was and <em>how charged</em> it was — but had no awareness of how it was being driven, or
-  whether it had crashed. That was a strategic gap on three fronts:
+  <em>where</em> a vehicle was and <em>how charged</em> it was, but it had no awareness of how the vehicle was being
+  driven, or whether it had crashed. That was a strategic gap on three fronts:
 </p>
 <ul>
   <li><strong>Safety blind spot.</strong> A crash could go undetected for a long time, delaying emergency response and
     exposing fleet operators to liability and reputational damage.</li>
   <li><strong>Untapped data value.</strong> The IMU was already present in the hardware and its data was simply unused,
     while competitors were beginning to offer driver-scoring and crash detection as premium features.</li>
-  <li><strong>No behavioural lever.</strong> Fleet operators had no objective way to identify risky drivers, coach them
-    or reward safe ones — a direct driver of accident rates, vehicle wear and insurance cost.</li>
+  <li><strong>No behavioural lever.</strong> Fleet operators had no objective way to identify risky drivers, coach them,
+    or reward safe ones. This is a direct driver of accident rates, vehicle wear, and insurance cost.</li>
 </ul>
 
 <div class="callout">
   <span class="lab">Core thesis</span>
   <p>
     The hardware to detect crashes and risky driving <strong>already existed in the field</strong>. The opportunity was
-    a pure software and analytics play — high margin, deployable over the air, and immediately monetisable. That framing
-    is what won it a roadmap slot: zero BOM cost, zero manufacturing dependency, revenue against an installed base.
+    a pure software and analytics play: high margin, deployable over the air, and immediately monetisable. That framing
+    is what won it a roadmap slot, with zero BOM cost, zero manufacturing dependency, and revenue against an installed
+    base.
   </p>
 </div>
 
 <div class="fig fig-img zoomable reveal">
-  <div class="fig-title">System overview — sensor to fleet action</div>
+  <div class="fig-title">System overview: sensor to fleet action</div>
   <img src="../assets/img/imu-system-overview.png" alt="IMU-based crash detection system for electric vehicle fleets: EV vehicle, on-device edge processing, connectivity, cloud platform and fleet operations dashboard" loading="lazy" width="1693" height="929">
   <p class="fig-note">Five stages, one design rule: escalate only what matters. Click to enlarge.</p>
 </div>
@@ -88,7 +89,7 @@
     <div class="proj-kicker">Partnership revenue</div>
     <h3 style="font-size:1.02rem">Insurance telematics</h3>
     <p>Objective crash and driving data enables usage-based-insurance partnerships, where insurers pay for verified risk
-      data — recurring and high margin.</p>
+      data. This revenue is recurring and high margin.</p>
   </div>
   <div class="card reveal">
     <div class="proj-kicker">Upsell</div>
@@ -116,7 +117,7 @@
 </table>
 </div>
 
-<h2>How it works — the detection pipeline</h2>
+<h2>How it works: the detection pipeline</h2>
 <p>
   The feature runs as a layered pipeline on the in-vehicle device, escalating only meaningful events to the cloud.
   The architecture is the product decision: <strong>classify on the device, transmit events not streams.</strong>
@@ -132,7 +133,7 @@
 <table>
   <thead><tr><th>Stage</th><th>What happens</th><th>Why it's there</th></tr></thead>
   <tbody>
-    <tr><td>1 · IMU raw data</td><td>6-axis accelerometer + gyroscope sampled continuously on the device</td><td>Already present in hardware — zero BOM cost</td></tr>
+    <tr><td>1 · IMU raw data</td><td>6-axis accelerometer + gyroscope sampled continuously on the device</td><td>Already present in hardware, at zero BOM cost</td></tr>
     <tr><td>2 · On-device filtering</td><td>Noise and road-artefact rejection using duration, multi-axis correlation and post-event motion checks</td><td class="hl">Cuts false alarms before they ever reach a customer</td></tr>
     <tr><td>3 · Event classification</td><td>Signatures matched to crash, harsh braking, rapid acceleration and sharp cornering, with severity scored via jerk and deceleration profiles</td><td>Turns signal into something a person can act on</td></tr>
     <tr><td>4 · Cloud + alert</td><td>Only classified events plus a short data window are sent up; crashes alert immediately, behaviour events aggregate into a score</td><td>Keeps bandwidth and storage cost survivable at fleet scale</td></tr>
@@ -142,9 +143,9 @@
 
 <h2>The hard part: a pothole is not a crash</h2>
 <p>
-  A speed bump and a collision both produce a sharp acceleration spike. If your detector is a magnitude threshold, every
-  bad road in India is a crash — and a crash alert that cries wolf is worse than no crash alert at all, because the
-  operator learns to ignore it.
+  A speed bump and a collision both produce a sharp acceleration spike. If your detector relies on a magnitude
+  threshold, every bad road in India registers as a crash. A crash alert that cries wolf is worse than no crash alert
+  at all, because the operator learns to ignore it.
 </p>
 <p>
   The discriminator isn't the peak. It's <strong>what happens after the peak.</strong> A pothole produces a short spike
@@ -153,16 +154,16 @@
 </p>
 
 <div class="fig fig-img zoomable reveal">
-  <div class="fig-title">Signal discrimination — rejection vs. detection</div>
+  <div class="fig-title">Signal discrimination: rejection vs. detection</div>
   <img src="../assets/img/imu-signal-discrimination.png" alt="Two acceleration traces: a pothole shows a short spike above threshold with motion continuing and is rejected; a genuine collision shows a large spike after which the vehicle stops, and a crash alert is sent" loading="lazy" width="1780" height="814">
-  <p class="fig-note">Illustrative signal logic — real thresholds are calibrated per vehicle class from fleet data.</p>
+  <p class="fig-note">Illustrative signal logic. Real thresholds are calibrated per vehicle class from fleet data.</p>
 </div>
 
 <div class="callout">
   <span class="lab">Why the false-positive rate was agreed before any code</span>
   <p>
     I co-defined an acceptable false-positive rate <strong>with fleet customers, before building thresholds</strong>.
-    That inverted the usual order — normally engineering tunes, then customers complain. Agreeing the number first made
+    That inverted the usual order. Normally engineering tunes, then customers complain. Agreeing the number first made
     it an acceptance criterion rather than an opinion, and it settled the "is this good enough to ship" argument once
     instead of every release.
   </p>
@@ -170,7 +171,7 @@
 
 <h3>Driver scoring logic</h3>
 <ul>
-  <li>Each detected event is <strong>weighted by type and severity</strong> — a crash is not a sharp corner.</li>
+  <li>Each detected event is <strong>weighted by type and severity</strong>, since a crash is not a sharp corner.</li>
   <li>Events are <strong>normalised against vehicle-class baselines</strong>. A loaded e-rickshaw and a light scooter
     produce entirely different signatures for the same driving; scoring them on one scale would penalise a whole vehicle
     class for existing.</li>
@@ -179,9 +180,9 @@
 </ul>
 
 <div class="fig fig-img zoomable reveal">
-  <div class="fig-title">Fleet safety dashboard — what the operator actually sees</div>
+  <div class="fig-title">Fleet safety dashboard: what the operator actually sees</div>
   <img src="../assets/img/imu-dashboard.png" alt="Fleet safety dashboard prototype showing active vehicles, crashes detected, average driver score, harsh event reduction, event type breakdown, driver score distribution, harsh events trend and a driver leaderboard" loading="lazy" width="1667" height="1043">
-  <p class="fig-note">Illustrative prototype with mock data — for portfolio demonstration only.</p>
+  <p class="fig-note">Illustrative prototype with mock data, for portfolio demonstration only.</p>
 </div>
 
 <p>
@@ -209,15 +210,15 @@
 </div>
 <p>
   I translated these into PRDs and user stories with explicit acceptance criteria, then used a RICE-style assessment of
-  customer impact to sequence them — <strong>crash detection first</strong>, given its safety weight and its direct line
-  to insurance revenue.
+  customer impact to sequence them. <strong>Crash detection came first</strong>, given its safety weight and its direct
+  line to insurance revenue.
 </p>
 
 <h2>Projected impact</h2>
 <div class="fig fig-img zoomable reveal">
   <div class="fig-title">Modelled business impact after deployment</div>
   <img src="../assets/img/imu-business-impact.png" alt="Three charts: crash response time falling from 42 minutes to 4 minutes, harsh events per 1000 km falling from 18.5 to 10.9, and revenue per vehicle rising 34 percent with a safety telematics tier" loading="lazy" width="1780" height="793">
-  <p class="fig-note">Illustrative projected figures for portfolio demonstration — not audited production metrics.</p>
+  <p class="fig-note">Illustrative projected figures for portfolio demonstration, not audited production metrics.</p>
 </div>
 
 <div class="stat-row">
@@ -229,8 +230,8 @@
 
 <h2>Outcome &amp; strategic value</h2>
 <ul>
-  <li><strong>A safety-critical, real-time detection feature delivered within device compute and bandwidth limits</strong>
-    — the constraint that dictated the whole architecture.</li>
+  <li><strong>A safety-critical, real-time detection feature delivered within device compute and bandwidth limits.</strong>
+    This was the constraint that dictated the whole architecture.</li>
   <li><strong>Foundation laid for an insurance-telematics revenue stream</strong> and a premium safety tier above the
     base subscription.</li>
   <li><strong>Retention strengthened on a ₹40L/month product line</strong> by deepening platform value for fleet
@@ -242,7 +243,7 @@
 <h2>What I'd take to the next one</h2>
 <p>
   The most valuable roadmap items are often <strong>already paid for</strong>. Before arguing for new hardware, audit
-  what the installed base can already sense and nobody is reading — the business case writes itself when the BOM cost is
+  what the installed base can already sense and nobody is reading. The business case writes itself when the BOM cost is
   zero and the delivery mechanism is an OTA campaign you already own. And when a feature's credibility rests on a
   threshold, <strong>negotiate the acceptable error rate with the customer before you build</strong>, not after they
   complain.

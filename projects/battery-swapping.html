@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Modular Battery Swapping Station — Ahraz Shamim</title>
-<meta name="description" content="Case study: leading new product development of a ground-up, AUTOSAR-compliant modular battery swapping station — 6 pilot units, a safety-gated swap sequence, and the energy-as-a-service model behind it.">
+<title>Modular Battery Swapping Station, Ahraz Shamim</title>
+<meta name="description" content="Case study: leading new product development of a ground-up, AUTOSAR-compliant modular battery swapping station. It covers six pilot units, a safety-gated swap sequence, and the energy-as-a-service model behind it.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,13 +32,13 @@
     <p class="eyebrow">Case study · New product development · Hardware</p>
     <h1 class="cs-title">Modular Battery Swapping Station</h1>
     <p class="lede">
-      A commercial rider doesn't lose money charging — they lose money <em>waiting</em>. This is a ground-up, modular
-      swapping station that turns hours of downtime into a two-minute pit stop, built AUTOSAR-compliant from nothing
-      because no off-the-shelf reference existed, and delivered as six pilot units for client field testing.
+      A commercial rider doesn't lose money charging. They lose money <em>waiting</em>. This is a ground-up, modular
+      swapping station that turns hours of downtime into a two-minute pit stop. It was built AUTOSAR-compliant from
+      nothing because no off-the-shelf reference existed, and it was delivered as six pilot units for client field testing.
     </p>
     <dl class="cs-facts">
       <div><dt>My role</dt><dd>New Product Development lead</dd></div>
-      <div><dt>Timeline</dt><dd>Nov 2024 — Jan 2025</dd></div>
+      <div><dt>Timeline</dt><dd>Nov 2024 to Jan 2025</dd></div>
       <div><dt>Delivered</dt><dd class="hl">6 AUTOSAR-compliant pilot units</dd></div>
       <div><dt>Stack</dt><dd>MATLAB / Simulink / Stateflow · MISRA Embedded C</dd></div>
     </dl>
@@ -55,25 +55,26 @@
 <p>
   Charging time is the defining bottleneck for commercial EV fleets. A delivery rider or e-rickshaw driver is paid by
   trips completed, so every hour a vehicle sits charging is lost income for both the driver and the operator. Swapping
-  solves that directly — but the infrastructure to do it safely and reliably did not exist off the shelf for the
+  solves that directly, but the infrastructure to do it safely and reliably did not exist off the shelf for the
   client's needs.
 </p>
 <ul>
   <li><strong>Downtime kills fleet economics.</strong> Commercial drivers are paid per trip; charging hours are revenue
     neither they nor the operator ever recover.</li>
-  <li><strong>No reliable modular station existed.</strong> The client needed something built from the ground up — safe,
-    automated and standards-compliant — not a lab prototype that works when an engineer is standing next to it.</li>
+  <li><strong>No reliable modular station existed.</strong> The client needed something built from the ground up: safe,
+    automated, and standards-compliant. It could not be a lab prototype that works only when an engineer is standing
+    next to it.</li>
   <li><strong>Safety is non-negotiable.</strong> Swapping involves high-energy batteries and physical actuators. Any
-    unsafe state — a battery ejecting mid-charge, a door unlocking at the wrong moment — is a serious hazard and an
-    instant deal-breaker for deployment.</li>
+    unsafe state, such as a battery ejecting mid-charge or a door unlocking at the wrong moment, is a serious hazard
+    and an instant deal-breaker for deployment.</li>
 </ul>
 
 <div class="callout">
   <span class="lab">Core thesis</span>
   <p>
     Whoever builds safe, reliable swapping infrastructure captures the recurring <strong>energy-as-a-service</strong>
-    layer of the EV economy — far stickier and higher-value than one-time hardware sales. The station is the entry
-    ticket; the per-swap economics are the actual business.
+    layer of the EV economy, which is far stickier and higher-value than one-time hardware sales. The station is the
+    entry ticket; the per-swap economics are the actual business.
   </p>
 </div>
 
@@ -82,7 +83,7 @@
   <div class="card reveal">
     <div class="proj-kicker">Recurring</div>
     <h3 style="font-size:1.02rem">Energy-as-a-service</h3>
-    <p>Riders pay per swap — recurring revenue rather than a one-time sale, with predictable, high-frequency usage.</p>
+    <p>Riders pay per swap, which creates recurring revenue rather than a one-time sale, with predictable, high-frequency usage.</p>
   </div>
   <div class="card reveal">
     <div class="proj-kicker">Hybrid</div>
@@ -108,16 +109,16 @@
 </table>
 </div>
 
-<h2>How it works — the swap sequence</h2>
+<h2>How it works: the swap sequence</h2>
 <p>
   The station runs a strict, safety-gated state machine. Every transition has a defined fail-safe, so an unsafe state is
-  <strong>physically impossible rather than merely discouraged</strong> — the distinction that separates a deployable
+  <strong>physically impossible rather than merely discouraged</strong>. That distinction is what separates a deployable
   product from a demo.
 </p>
 
 <div class="fig reveal">
   <div class="fig-title">Five-step swap sequence with interlocks</div>
-  <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five step swap sequence: authenticate, unlock slot, eject depleted battery, insert charged battery, re-lock and confirm — each gated by an interlock">
+  <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five step swap sequence: authenticate, unlock slot, eject depleted battery, insert charged battery, and re-lock and confirm, each gated by an interlock">
     <defs><marker id="b1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4457c9"/></marker></defs>
 
     <g class="fade-el">
@@ -161,11 +162,11 @@
       <path d="M500,103 L520,103"/><path d="M670,103 L690,103"/>
     </g>
 
-    <text x="430" y="30" text-anchor="middle" class="svg-label" fill="#4457c9">every transition is gated — the next step cannot begin until the previous one is confirmed</text>
+    <text x="430" y="30" text-anchor="middle" class="svg-label" fill="#4457c9">every transition is gated, so the next step cannot begin until the previous one is confirmed</text>
 
     <g class="fade-el" style="animation-delay:.75s">
       <rect x="14" y="182" width="832" height="94" rx="12" fill="#faedeb" stroke="#c05e52" stroke-width="1.4"/>
-      <text x="34" y="208" class="svg-title" fill="#9c463c">Interlocks — states made physically impossible</text>
+      <text x="34" y="208" class="svg-title" fill="#9c463c">Interlocks: states made physically impossible</text>
       <text x="34" y="232" class="svg-label">✕ Ejecting a battery that is currently charging</text>
       <text x="34" y="252" class="svg-label">✕ Unlocking any slot other than the selected one</text>
       <text x="440" y="232" class="svg-label">✕ Unlocking mid-cycle before removal is confirmed</text>
@@ -177,23 +178,23 @@
 <h2>Safety architecture</h2>
 <p>
   Three principles carried the whole design, and all three came from the same insight: on a high-energy system, safety
-  cannot be a procedure people follow — it has to be a state the machine cannot enter.
+  cannot be a procedure people follow. It has to be a state the machine cannot enter.
 </p>
 <ul>
   <li><strong>Every actuator has an explicit fail-safe default.</strong> Loss of power, loss of comms or an unexpected
     reset all resolve to the same known-safe configuration rather than to whatever the last command happened to be.</li>
-  <li><strong>Interlock conditions make unsafe transitions impossible</strong> — ejecting a charging battery or unlocking
-    mid-cycle aren't guarded against in software logic, they're gated at the transition itself.</li>
-  <li><strong>Modular subsystems built and tested in parallel against defined interfaces</strong> — sequencing, actuator
-    control, SoC display and interlocks each developed independently, which is what made a three-month timeline
-    survivable with mechanical, electrical and embedded teams working simultaneously.</li>
+  <li><strong>Interlock conditions make unsafe transitions impossible.</strong> Ejecting a charging battery or unlocking
+    mid-cycle isn't guarded against in software logic; it's gated at the transition itself.</li>
+  <li><strong>Modular subsystems were built and tested in parallel against defined interfaces.</strong> Sequencing,
+    actuator control, SoC display, and interlocks each developed independently, which is what made a three-month
+    timeline survivable, with mechanical, electrical, and embedded teams working simultaneously.</li>
 </ul>
 
 <div class="callout">
   <span class="lab">Why model-based development earned its keep</span>
   <p>
     Building the sequencing in <strong>MATLAB/Simulink/Stateflow</strong> meant the state machine was reviewable as a
-    diagram by mechanical and client stakeholders who don't read Embedded C — and the same model generated
+    diagram by mechanical and client stakeholders who don't read Embedded C, and the same model generated
     <strong>MISRA-compliant</strong> code. On a safety-gated system, having one artefact that is simultaneously the
     specification, the review surface and the source of the implementation removes an entire class of
     spec-drift failures.
@@ -202,8 +203,8 @@
 
 <h2>Stakeholder alignment</h2>
 <p>
-  As NPD lead I aligned mechanical, electrical, embedded and client stakeholders around a single safe, shippable MVP —
-  which mostly meant deciding what <em>not</em> to build.
+  As NPD lead, I aligned mechanical, electrical, embedded, and client stakeholders around a single safe, shippable MVP.
+  That mostly meant deciding what <em>not</em> to build.
 </p>
 <div class="table-scroll">
 <table>
@@ -229,10 +230,10 @@
   <li><strong>Six AUTOSAR-compliant pilot units delivered</strong> from a ground-up design with no reference to work
     from.</li>
   <li><strong>Technical and safety feasibility proven</strong> for modular swapping under the client's real field
-    conditions — the question the pilot existed to answer.</li>
+    conditions. That was the question the pilot existed to answer.</li>
   <li><strong>Foundation established for an energy-as-a-service revenue model</strong> with recurring per-swap
     economics.</li>
-  <li><strong>Modular architecture cut the cost of later capability</strong> — a new battery type integrates in days
+  <li><strong>Modular architecture cut the cost of later capability.</strong> A new battery type integrates in days
     rather than weeks, which is where the architectural investment repays itself.</li>
 </ul>
 
@@ -241,7 +242,7 @@
   On safety-critical hardware, <strong>define the interfaces before the components</strong>. It looks like overhead in
   week one and it's the only reason three disciplines could build simultaneously against a fixed date. And the framing
   that made the AUTOSAR scope decision easy: compliance isn't a checkbox you satisfy at the end, it's a constraint you
-  choose the MVP boundary around at the start — so pick the safety-critical core, commit to it fully, and defer
+  choose the MVP boundary around at the start. So pick the safety-critical core, commit to it fully, and defer
   everything that isn't.
 </p>
 

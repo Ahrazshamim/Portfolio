@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mass FOTA Automation Dashboard — Ahraz Shamim</title>
+<title>Mass FOTA Automation Dashboard, Ahraz Shamim</title>
 <meta name="description" content="Case study: turning manual per-device firmware rollouts into a self-serve, CSV-driven fleet campaign tool with per-device status tracking.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +38,7 @@
     <dl class="cs-facts">
       <div><dt>My role</dt><dd>Product owner + builder</dd></div>
       <div><dt>Company</dt><dd>Vecmocon Technologies</dd></div>
-      <div><dt>Users</dt><dd>Operations &amp; support — not engineers</dd></div>
+      <div><dt>Users</dt><dd>Operations &amp; support, not engineers</dd></div>
       <div><dt>Input</dt><dd>CSV of device IDs + firmware binary</dd></div>
     </dl>
   </div>
@@ -50,8 +50,8 @@
 <h2>The problem</h2>
 <p>
   Firmware-over-the-air updates existed. That wasn't the issue. The issue was that running one meant an engineer, a
-  terminal, a list of device IDs, and a lot of patience — device by device, checking status by hand, retrying the ones
-  that dropped mid-transfer because the vehicle was in a basement or switched off.
+  terminal, a list of device IDs, and a lot of patience. It meant going device by device, checking status by hand, and
+  retrying the ones that dropped mid-transfer because the vehicle was in a basement or switched off.
 </p>
 <p>
   That workflow has three compounding costs, and only the first one is obvious:
@@ -59,7 +59,7 @@
 <ul>
   <li><strong>Engineering toil.</strong> Senior engineering time spent on repetitive dispatch instead of building.</li>
   <li><strong>Release drag.</strong> Because rollouts were painful, they got batched and deferred. Fixes that were ready
-    sat waiting for someone to have a free afternoon — which meant the field ran older firmware than it needed to.</li>
+    sat waiting for someone to have a free afternoon, which meant the field ran older firmware than it needed to.</li>
   <li><strong>Error rate.</strong> Manual device targeting means typos, missed units, and a fleet that silently ends up
     on three different firmware versions. Then a support ticket arrives and nobody's sure what's actually running on
     that vehicle.</li>
@@ -70,7 +70,7 @@
   <p>
     Internal tools lose roadmap arguments to customer-facing features by default. The argument that worked was
     reframing it as a <strong>release-velocity</strong> problem rather than a convenience one: every hour of rollout
-    friction is an hour of delay on every fix behind it. The tool wasn't competing with features — it was competing with
+    friction is an hour of delay on every fix behind it. The tool wasn't competing with features. It was competing with
     the cost of shipping them slowly.
   </p>
 </div>
@@ -132,7 +132,7 @@
       <rect x="415" y="212" width="150" height="30" rx="6" fill="#eceefb" stroke="#4457c9"/>
       <text x="490" y="232" text-anchor="middle" class="svg-label" fill="#313f9e">in progress</text>
       <rect x="415" y="248" width="150" height="30" rx="6" fill="#f6f6f3" stroke="#d8d6cf"/>
-      <text x="490" y="268" text-anchor="middle" class="svg-label">offline — not yet reached</text>
+      <text x="490" y="268" text-anchor="middle" class="svg-label">offline: not yet reached</text>
     </g>
     <g stroke="#4457c9" stroke-width="1.6" fill="none" marker-end="url(#f1)">
       <path d="M160,223 L205,223" class="flow-dash"/>
@@ -146,14 +146,14 @@
       <text x="600" y="236" class="svg-label" fill="#35714f">✓ offline = normal state</text>
       <text x="600" y="256" class="svg-label" fill="#35714f">✓ fixes ship when ready</text>
     </g>
-    <text x="410" y="308" text-anchor="middle" class="svg-label-sm">Offline devices — parked, powered down, out of coverage — are devices the campaign hasn't reached yet, not errors to triage</text>
+    <text x="410" y="308" text-anchor="middle" class="svg-label-sm">Offline devices, meaning parked, powered down, or out of coverage, are devices the campaign hasn't reached yet, not errors to triage</text>
   </svg>
 </div>
 
 <h3>CSV-driven targeting</h3>
 <p>
-  CSV was a deliberate choice over building a query builder or a device-picker UI. Ops already lives in spreadsheets —
-  the device list for "all TATA units in the Pune pilot" already exists as a spreadsheet column, produced by whatever
+  CSV was a deliberate choice over building a query builder or a device-picker UI. Ops already lives in spreadsheets.
+  The device list for "all TATA units in the Pune pilot" already exists as a spreadsheet column, produced by whatever
   tool they used to get it. Meeting them in the format they already have removed a whole class of "how do I select the
   right devices" problems, and it meant zero training. The fastest interface is often the one the user has already
   built themselves.
@@ -163,15 +163,15 @@
 <p>
   The backend takes the target list and manages the rollout as a <strong>campaign</strong> rather than a series of
   independent pushes: distributing the firmware, tracking which devices have acknowledged, which are in progress, which
-  completed, and which failed. Devices that are offline — parked, powered down, out of coverage — are simply devices the
-  campaign hasn't reached yet, not errors requiring a human decision.
+  completed, and which failed. Devices that are offline, meaning parked, powered down, or out of coverage, are simply
+  devices the campaign hasn't reached yet, not errors requiring a human decision.
 </p>
 
 <h3>Per-device status tracking</h3>
 <p>
   The status view is what turns the tool from a script into a product. At any moment an operator can answer "what version
   is this fleet on, and which specific units haven't taken the update?" without asking engineering. That single question
-  was previously the source of a large share of internal back-and-forth — and it's also the question that support needs
+  was previously the source of a large share of internal back-and-forth. It's also the question that support needs
   answered before they can diagnose anything.
 </p>
 
@@ -187,8 +187,8 @@
     </tr>
     <tr>
       <td>CSV input over a device-query UI</td>
-      <td>Ops already produces these lists. Building a query builder would have been more work, later, and would have
-        needed training — to replace a workflow they were already fluent in.</td>
+      <td>Ops already produces these lists. Building a query builder would have been more work later, and it would have
+        needed training to replace a workflow they were already fluent in.</td>
     </tr>
     <tr>
       <td>Campaign as a first-class object</td>
@@ -206,7 +206,7 @@
 
 <h2>Outcome</h2>
 <ul>
-  <li><strong>Rollouts moved from engineering to operations</strong> — self-serve, no ticket, no specialist required.</li>
+  <li><strong>Rollouts moved from engineering to operations:</strong> self-serve, no ticket, no specialist required.</li>
   <li><strong>Fleet-wide updates became routine</strong> instead of an event to schedule around, so fixes reach the field
     when they're ready rather than when someone's free.</li>
   <li><strong>Manual targeting errors eliminated</strong>; fleet firmware state became consistent and, more importantly,
@@ -219,7 +219,7 @@
   The highest-leverage product work is often the least glamorous: find the workflow where a specialist is acting as a
   human API, and remove them from the loop. It never wins a roadmap argument on its own merits, so it has to be framed
   in terms of what it unblocks. And when you build for internal users, <strong>build for the format they already work
-  in</strong> — adoption problems are mostly format problems in disguise.
+  in</strong>. Adoption problems are mostly format problems in disguise.
 </p>
 
 </div>

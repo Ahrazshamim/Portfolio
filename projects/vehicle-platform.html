@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Connected Vehicle Security &amp; Control Platform — Ahraz Shamim</title>
-<meta name="description" content="Case study: BLE keyless control, three-tier power management, motion-aware anti-theft, CAN battery interlocks and offline Find My recovery — one integrated vehicle platform.">
+<title>Connected Vehicle Security &amp; Control Platform, Ahraz Shamim</title>
+<meta name="description" content="Case study: BLE keyless control, three-tier power management, motion-aware anti-theft, CAN battery interlocks and offline Find My recovery come together as one integrated vehicle platform.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234457c9'/><text y='72' x='50' text-anchor='middle' font-size='58' font-family='sans-serif' font-weight='bold' fill='white'>A</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,9 @@
     <h1 class="cs-title">Connected Vehicle Security<br>&amp; Control Platform</h1>
     <p class="lede">
       Keyless BLE control, three-tier power management, motion-aware anti-theft, CAN battery interlocks and
-      network-independent recovery — shipped as one integrated system on an EC200U tracker. Every feature here
-      constrains every other, which is exactly why they had to be designed as a platform rather than a backlog.
+      network-independent recovery come together as one integrated system, shipped on an EC200U tracker. Every
+      feature here constrains every other, which is exactly why they had to be designed as a platform rather than
+      a backlog.
     </p>
     <dl class="cs-facts">
       <div><dt>My role</dt><dd>Product owner + firmware developer</dd></div>
@@ -57,12 +58,12 @@
   they're a single system, because each one's requirements are written in the others' constraints:
 </p>
 <ul>
-  <li>Anti-theft has to work on a <strong>parked</strong> vehicle — so it has to survive whatever power saving does.</li>
-  <li>Power saving switches off the mobile radio — so <strong>ignition permission</strong>, which depends on a CAN
+  <li>Anti-theft has to work on a <strong>parked</strong> vehicle, so it has to survive whatever power saving does.</li>
+  <li>Power saving switches off the mobile radio, so <strong>ignition permission</strong>, which depends on a CAN
     battery heartbeat, can't be granted while asleep.</li>
-  <li>The buzzer is wired to the ignition circuit — so making a <strong>lock beep</strong> means briefly driving the
+  <li>The buzzer is wired to the ignition circuit, so making a <strong>lock beep</strong> means briefly driving the
     ignition line, which must not read as an ignition-on event.</li>
-  <li>If the mobile network is the only way to find a stolen vehicle, then <strong>power saving defeats recovery</strong> —
+  <li>If the mobile network is the only way to find a stolen vehicle, then <strong>power saving defeats recovery</strong>,
     which is why the locator had to be radio-independent.</li>
 </ul>
 <p>
@@ -139,7 +140,7 @@
   <p class="fig-note">The tracker runs on the auxiliary battery and never sleeps. The main battery is separate and identifies itself over CAN.</p>
 </div>
 
-<h2>1 · Power modes — saving current without disarming the vehicle</h2>
+<h2>1 · Power modes: saving current without disarming the vehicle</h2>
 <p>
   A parked scooter can sit for weeks. A device that stays fully connected drains an auxiliary battery; a device that
   properly sleeps stops protecting anything and takes seconds to boot when you need it. Neither is acceptable, so the
@@ -201,7 +202,7 @@
 <div class="callout">
   <span class="lab">The decision underneath all three modes</span>
   <p>
-    The device <strong>never actually sleeps</strong> — it sheds radios instead. That costs a little standby current
+    The device <strong>never actually sleeps</strong>. It sheds radios instead. That costs a little standby current
     versus a true sleep state, and buys two things I wasn't willing to trade: <strong>zero boot delay on recovery</strong>,
     and <strong>anti-theft that's live in Low Power</strong>. A security device that has to wake up before it can
     protect you isn't a security device.
@@ -210,18 +211,18 @@
 
 <h3>What the user actually notices</h3>
 <ul>
-  <li><strong>The app always connects</strong>, in every mode. This was the non-negotiable UX requirement — a user must
+  <li><strong>The app always connects</strong>, in every mode. This was the non-negotiable UX requirement: a user must
     never be told "your vehicle is asleep."</li>
   <li>In Derated/Low Power the vehicle <strong>stops appearing online</strong> and live location goes stale. That's a
-    visible, explainable trade — not a fault.</li>
-  <li>Any app command returns it to Active. Rejoining the network takes <strong>20–40 s</strong>, so the first cloud
+    visible, explainable trade, not a fault.</li>
+  <li>Any app command returns it to Active. Rejoining the network takes <strong>20 to 40 s</strong>, so the first cloud
     update after waking isn't instant. We surfaced this in the app rather than hiding it behind a spinner.</li>
 </ul>
 
-<h2>2 · BLE keyless control — every refusal is visible</h2>
+<h2>2 · BLE keyless control: every refusal is visible</h2>
 <p>
-  The app locks, unlocks, opens the boot and controls ignition over an authenticated Bluetooth Low Energy channel — no
-  physical key. Pairing and bonding plus characteristic-level command security prevent replay and unauthorised unlock,
+  The app locks, unlocks, opens the boot and controls ignition over an authenticated Bluetooth Low Energy channel, with
+  no physical key. Pairing and bonding plus characteristic-level command security prevent replay and unauthorised unlock,
   and the design spans two radio generations (BLE 4.2 on v1.x, BLE 5.3 with Coded PHY on vB.x, roughly 4× range).
 </p>
 
@@ -230,7 +231,7 @@
   <thead><tr><th>Command</th><th>Effect</th><th>Refused when</th></tr></thead>
   <tbody>
     <tr><td>Lock</td><td>Short beep; anti-theft <strong>armed</strong></td><td>Ignition is ON</td></tr>
-    <tr><td>Unlock / Ignition-off</td><td>If ignition ON → turns it off; otherwise double beep and <strong>disarms</strong> anti-theft</td><td class="hl">Never — unlock always wins</td></tr>
+    <tr><td>Unlock / Ignition-off</td><td>If ignition ON → turns it off; otherwise double beep and <strong>disarms</strong> anti-theft</td><td class="hl">Never: unlock always wins</td></tr>
     <tr><td>Boot unlock</td><td>Opens the boot via the companion MCU</td><td>Companion MCU unreachable</td></tr>
     <tr><td>Ignition ON</td><td>Energises the ignition relay</td><td>Main battery not detected, <em>or</em> vehicle is locked</td></tr>
   </tbody>
@@ -238,7 +239,7 @@
 </div>
 
 <p>
-  Every command returns an <strong>acknowledgement</strong> — <code>ACK</code> or <code>NAK</code> with a reason. That
+  Every command returns an <strong>acknowledgement</strong>: <code>ACK</code> or <code>NAK</code> with a reason. That
   was a product requirement, not a protocol nicety. A keyless system that silently ignores you is worse than one that
   refuses you, because the user's next move is to press it again, then assume the vehicle is broken. Naming the reason
   turns a support ticket into a UI string.
@@ -248,13 +249,13 @@
   <span class="lab">A hardware quirk that became a spec clause</span>
   <p>
     The buzzer is powered from the ignition circuit, so producing a lock/unlock beep means briefly raising the ignition
-    line. That is emphatically <strong>not</strong> an ignition-on event — the vehicle stays logically off. Writing that
+    line. That is emphatically <strong>not</strong> an ignition-on event. The vehicle stays logically off. Writing that
     distinction into the spec explicitly is what stopped it being "discovered" later as a safety bug by someone reading
     the telemetry.
   </p>
 </div>
 
-<h2>3 · Main-battery detection — asymmetric on purpose</h2>
+<h2>3 · Main-battery detection: asymmetric on purpose</h2>
 <p>
   The main battery announces itself with a repeating CAN heartbeat, and ignition permission depends on it. The detection
   logic is deliberately lopsided: <strong>quick to trust, slow to distrust.</strong>
@@ -270,7 +271,7 @@
       <circle cx="60" cy="70" r="7" fill="#4b9166"/>
       <text x="60" y="48" text-anchor="middle" class="svg-title" fill="#35714f">PRESENT</text>
       <text x="60" y="98" text-anchor="middle" class="svg-label-sm">1 heartbeat</text>
-      <text x="60" y="112" text-anchor="middle" class="svg-label-sm">— instant</text>
+      <text x="60" y="112" text-anchor="middle" class="svg-label-sm">instant</text>
     </g>
     <g class="fade-el" style="animation-delay:.35s">
       <circle cx="330" cy="70" r="7" fill="#c8863c"/>
@@ -288,7 +289,7 @@
     <g class="fade-el" style="animation-delay:.9s">
       <rect x="480" y="146" width="260" height="62" rx="10" fill="#faedeb" stroke="#c05e52"/>
       <text x="610" y="169" text-anchor="middle" class="svg-title" fill="#9c463c">Battery removed while riding</text>
-      <text x="610" y="189" text-anchor="middle" class="svg-label">ignition cut automatically — no app needed</text>
+      <text x="610" y="189" text-anchor="middle" class="svg-label">ignition cut automatically, no app needed</text>
     </g>
     <g class="fade-el" style="animation-delay:.55s">
       <rect x="60" y="146" width="320" height="62" rx="10" fill="#f6f6f3" stroke="#d8d6cf"/>
@@ -301,11 +302,11 @@
 <p>
   The asymmetry is the whole design. A symmetric threshold would either be so twitchy that ordinary CAN jitter reads as
   a removed battery, or so slow that a genuinely removed battery leaves the ignition relay live. Splitting it into two
-  timers — one for power logic, a longer one for ignition — lets each side of the system be as cautious as its
+  timers, one for power logic and a longer one for ignition, so each side of the system can be as cautious as its
   consequences warrant.
 </p>
 
-<h2>4 · Anti-theft — three detectors, one alarm</h2>
+<h2>4 · Anti-theft: three detectors, one alarm</h2>
 <p>
   Armed by Lock, disarmed by Unlock, and fully automatic in between. It runs in <strong>every power mode</strong>,
   including Low Power, which is the requirement everything else was designed around.
@@ -368,7 +369,7 @@
 <p>
   Redundancy across <em>independent channels</em>, not sensitivity. The wheel sensor and the motion sensor are separate
   hardware paths, so <strong>detection keeps working even if the motion sensor fails</strong>. A single-sensor design
-  has a single point of failure that is silent — the alarm simply never fires, and nobody discovers it until after a
+  has a single point of failure that is silent: the alarm simply never fires, and nobody discovers it until after a
   theft.
 </p>
 
@@ -383,7 +384,7 @@
   <tbody>
     <tr>
       <td>Too sensitive</td><td>False alarms from wind, neighbours, traffic</td>
-      <td class="hl">The user disables the feature — it then protects nothing. Terminal.</td>
+      <td class="hl">The user disables the feature, and it then protects nothing. Terminal.</td>
     </tr>
     <tr>
       <td>Too conservative</td><td>A careful thief stays under the bar</td>
@@ -394,12 +395,12 @@
 </div>
 <p>
   Because the failure modes are asymmetric, I specified a deliberate <strong>bias toward fewer false alarms</strong>, and
-  tuned against real parked-vehicle data rather than bench shakes — bench conditions contain none of the noise that
+  tuned against real parked-vehicle data rather than bench shakes, because bench conditions contain none of the noise that
   causes the problem. The 10-second alarm cycle exists for the same reason: it re-evaluates rather than latching, so a
   false trigger costs ten seconds of noise instead of a screaming vehicle in a car park.
 </p>
 
-<h2>5 · Reset safety — what survives a power cut</h2>
+<h2>5 · Reset safety: what survives a power cut</h2>
 <p>
   Vehicles lose power. The question is what the device believes when it comes back, and the answer differs per item
   because the risk differs per item.
@@ -408,9 +409,9 @@
 <table>
   <thead><tr><th>State</th><th>Survives reset?</th><th>Why</th></tr></thead>
   <tbody>
-    <tr><td>Locked / unlocked</td><td class="hl">Yes — restored from NV memory</td><td>A reset must never silently unlock a parked vehicle. Anti-theft re-arms automatically.</td></tr>
-    <tr><td>Ignition on/off</td><td>No — always off</td><td>Safety. A relay must only energise on a fresh, deliberate command — never on a boot sequence.</td></tr>
-    <tr><td>Power mode</td><td>No — starts Active</td><td>Safest default; re-enters Low Power normally within minutes.</td></tr>
+    <tr><td>Locked / unlocked</td><td class="hl">Yes, restored from NV memory</td><td>A reset must never silently unlock a parked vehicle. Anti-theft re-arms automatically.</td></tr>
+    <tr><td>Ignition on/off</td><td>No, always off</td><td>Safety. A relay must only energise on a fresh, deliberate command, never on a boot sequence.</td></tr>
+    <tr><td>Power mode</td><td>No, starts Active</td><td>Safest default; re-enters Low Power normally within minutes.</td></tr>
   </tbody>
 </table>
 </div>
@@ -420,7 +421,7 @@
   restored, actuator state never is.
 </p>
 
-<h2>6 · Find My — recovery when the network isn't there</h2>
+<h2>6 · Find My: recovery when the network isn't there</h2>
 <p>
   Every network-dependent locator has the same hole: the moment a thief puts the vehicle in a basement, removes the
   main battery, or the SIM loses coverage, it stops reporting. So the tracker continuously broadcasts an Apple
@@ -459,7 +460,7 @@
       <path d="M630,73 L678,73" class="flow-dash"/>
     </g>
     <text x="204" y="60" text-anchor="middle" class="svg-label-sm">BLE beacon</text>
-    <text x="130" y="130" class="svg-label-sm" fill="#2f8f83">runs in every power mode — Bluetooth never switches off</text>
+    <text x="130" y="130" class="svg-label-sm" fill="#2f8f83">runs in every power mode, Bluetooth never switches off</text>
   </svg>
 </div>
 
@@ -474,7 +475,7 @@
   <span class="lab">A provisioning requirement I had to escalate</span>
   <p>
     Each unit needs its <strong>own unique Find My key</strong>. Devices sharing one key are indistinguishable in the
-    network and cannot be located individually — which would quietly turn the whole feature into theatre at fleet scale.
+    network and cannot be located individually, which would quietly turn the whole feature into theatre at fleet scale.
     This is a manufacturing-line requirement, not a firmware one, so it had to be raised as a cross-team dependency
     before production rather than discovered in the field.
   </p>
@@ -486,7 +487,7 @@
   <thead><tr><th>Interaction</th><th>Rule</th></tr></thead>
   <tbody>
     <tr><td>Anti-theft vs. power saving</td><td class="hl">Anti-theft outranks power saving. An alarm can fire in any mode, and temporarily drives the ignition line to sound the buzzer.</td></tr>
-    <tr><td>Ignition vs. power mode</td><td>Ignition depends on the CAN battery link, which is off in Low Power. The app command wakes the device first, so the link is restored — but the vehicle must be awake for ignition to be permitted.</td></tr>
+    <tr><td>Ignition vs. power mode</td><td>Ignition depends on the CAN battery link, which is off in Low Power. The app command wakes the device first, so the link is restored, but the vehicle must be awake for ignition to be permitted.</td></tr>
     <tr><td>Lock vs. power mode</td><td>Independent. Locking doesn't change the power mode; the power mode doesn't disarm anti-theft.</td></tr>
     <tr><td>Motion as shared trigger</td><td>A small nudge lifts Low Power → Derated; significant motion returns it to Active <em>and</em> can raise an alarm if locked.</td></tr>
   </tbody>
@@ -496,26 +497,26 @@
 <h2>Outcome</h2>
 <div class="stat-row">
   <div class="stat-pill"><div class="v">~4×</div><div class="k">Lower standby draw in Low Power</div></div>
-  <div class="stat-pill"><div class="v">0 s</div><div class="k">Boot delay on recovery — never sleeps</div></div>
+  <div class="stat-pill"><div class="v">0 s</div><div class="k">Boot delay on recovery, never sleeps</div></div>
   <div class="stat-pill"><div class="v">3</div><div class="k">Independent theft detectors</div></div>
   <div class="stat-pill"><div class="v">2</div><div class="k">HW generations, one codebase</div></div>
 </div>
 <ul>
-  <li><strong>Security that survives power saving</strong> — anti-theft and BLE live in every mode, including the
+  <li><strong>Security that survives power saving</strong>: anti-theft and BLE live in every mode, including the
     deepest one.</li>
-  <li><strong>Keyless control with no silent failures</strong> — every command ACKs or NAKs with a reason.</li>
+  <li><strong>Keyless control with no silent failures</strong>: every command ACKs or NAKs with a reason.</li>
   <li><strong>Ignition physically gated on a live main battery</strong>, with automatic cut-off if it's removed mid-ride.</li>
-  <li><strong>Recovery without a network</strong> via the Find My beacon — works with no SIM, no coverage, no cloud.</li>
+  <li><strong>Recovery without a network</strong> via the Find My beacon, which works with no SIM, no coverage, no cloud.</li>
   <li><strong>Safe reset semantics</strong>: lock state restored, actuators never auto-restored.</li>
 </ul>
 
 <h2>What I'd take to the next one</h2>
 <p>
   Two things. First, <strong>on an integrated system, write the interaction rules before the feature specs.</strong> The
-  most valuable page in this document is the interaction table — not because it's clever, but because every one of those
+  most valuable page in this document is the interaction table, not because it's clever, but because every one of those
   rows was a real argument that got settled once instead of five times. Second, <strong>asymmetric thresholds are
-  usually right.</strong> Battery-present versus battery-absent, false alarm versus missed tamper, lock state versus
-  ignition state — in each case the two errors have different costs, and matching the timing to the cost beats picking
+  usually right.</strong> Battery-present versus battery-absent, false alarm versus missed tamper, and lock state versus
+  ignition state: in each case the two errors have different costs, and matching the timing to the cost beats picking
   one "correct" value.
 </p>
 
@@ -525,7 +526,7 @@
 <div class="next-cs">
   <div class="wrap" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center">
     <span style="color:var(--text-faint);font-family:var(--mono);font-size:.8rem">Next case study</span>
-    <a class="btn btn-ghost" href="safnect.html">SAF Connect — Healthcare Platform →</a>
+    <a class="btn btn-ghost" href="safnect.html">SAF Connect: Healthcare Platform →</a>
   </div>
 </div>
 </main>
